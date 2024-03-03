@@ -8,8 +8,13 @@ class Client {
 		Client(int client_fd);
 		~CLient();
 
-		void setReadbuf(std::string str);
+		void addReadbuf(std::string str);
 		std::string& getReadbuf() const;
+
+		bool&	getRegistered();
+		bool&	getInfocomplete();
+		bool&	getPasswdclear();
+
 
 	private:
 		Client();
@@ -17,6 +22,7 @@ class Client {
 		Client& operator=(const Client& rhs);
 
 		int _client_fd;
+		int _info_cnt;
 
 		std::string	_readbuf;
 		std::string	_sendbuf;
@@ -24,6 +30,10 @@ class Client {
 		std::string	_username;
 		std::string	_realname;
 		std::string	_old_nickname;
+
+		bool	_registered;
+		bool	_infocomplete;
+		bool	_passwdclear;
 };
 
 #endif

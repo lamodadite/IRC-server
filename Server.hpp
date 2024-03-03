@@ -12,13 +12,15 @@ class Server {
 		Server(std::string port, std::string passwd);
 		~Server();
 		
-		void setServerinfo(char *port);
-		void setServerSocket();
-		void networkProcess();
-		void acceptNewClient();
-		void disconnectClnt(int fd);
-		void recvMsgFromClient(int fd);
-		
+		void	setServerinfo(char *port);
+		void	setServerSocket();
+		void	networkProcess();
+		void	acceptNewClient();
+		void	disconnectClient(int fd);
+		void	recvMsgFromClient(int fd);
+		void	parseReadbuf(int fd, Client* client); 
+		void	fillClientInfo(Client* client, std::string msg);
+
 		Client* getClient(int fd);
 
 	private:

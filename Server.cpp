@@ -110,19 +110,62 @@ void Server::recvMsgFromClient(int fd) {
 		} else {
 			std::cerr << "Recv failed\n";
 		}
-		disconnectClnt(fd);
+		disconnectClient(fd);
 	} else {
 		std::cout << "Received: " << buffer << '\n';
-		// set을 = 이 아닌 += 으로  구상할것
-		client->setReadbuf(buffer);
+		// set을 = 이 아닌 += 으로  구상할것 add 로 변경함
+		client->addReadbuf(buffer);
+
 		// HTTP 프로토콜에서 \r\n 줄바꿈을 나타냄. npos는 못찾았을경우 나오는 반환값
 		// 자료를 덜받았으면 readbuf에 쌓아두고 더 수신을 기다림.
-		if (client->getReadbuf().find("\r\n") != std::string::npos) {
+		// 마지막에 \r\n이와서 정보가 완전할때만 처리
+		if (client->getReadbuf().find("\r\n") == client->getReadbuf().size() - 2) {
 			//client 정보 채우기랑 명령어들 구분하는법 공부하고 적용하기 여기가 제일 중요!!
 			parseReadbuf(fd, client);
-			//사용한 버퍼 처리 레퍼런스로 반환해서 clear가능
-			client->getReadbuf().clear();
+			//사용한 버퍼 처리 레퍼런스로 반환해서 clear가능 *유기*
+			//client->getReadbuf().clear();
 		}
+	}
+}
+
+void Server::parseReadbuf(int fd, Client* client) {
+	std::vector<std::string>	msg;
+	
+	splitReadbuf(msg, client);
+
+	for (size_t i = 0; i < msg.size(); i++) {
+		if (!msg[i].size()) continue; // 빈문자열인 경우 패스 <<< 빈문자열을 보내는 경우에도 응답하는 일이있으면 따로 처리 해야할듯
+		// 아직 정보들이 다들어오지 않은 client
+		if (client->getRegistered() == false) {
+			if (client->getInfocomplete() == false) fillClientInfo(client, msg[i]); //client 멤버함수로 만들려고 했으나 명령어 실행때문에.
+			if (client->getInfocomplete() == true) {
+				// client가 등록 되었다는 것을 알림. 알려야하는 내용들은 문서에서
+				sendClientRegistered(fd, client);
+				client->getRegistered = true;
+			} else {
+				// 
+			}
+		} else {
+			checkCommand(client, msg[i]);
+		}
+	}
+}
+
+void Server::fillClientInfo(Client* client, std::string msg) {
+	
+}
+
+void Server::splitReadbuf(std::vector<std::string>& msg, Client* client) {
+	std::string 	tmp;
+	std::string&	readbuf = client->getReadbuf();
+	int						idx;
+
+	//명령어가 \r\n 으로 한번에 여러개가 올수 있다해서
+	// 앞에서 완성된 메세지만 오게 해서 readbuf는 비워지고 \r\n이 연속으로 오는 경우 빈 문자열이 들어갈수도 있음.
+	while ((idx = readbuf.find("\r\n")) != std::string::npos) {
+		tmp = readbuf.substr(0, idx);
+		msg.push_back(tmp);
+		tmp.erase(0, idx + 2);
 	}
 }
 
@@ -131,7 +174,7 @@ void Server::sendMsgToClent(int fd, char buffer[], int bytesRecieved) {
 	send(fd, buffer, bytesRecieved, 0);
 }
 
-void Server::disconnectClnt(int fd) {
+void Server::disconnectClient(int fd) {
 	close(fd);
 	EV_SET(_change_list[0], fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
 	EV_SET(_change_list[1], fd, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
@@ -174,4 +217,5 @@ void Server::registerSocketToKqueue(int socketFd) {
 	}
 }
 
+// 일단은 연결된 소켓으로 들어와서 없는 경우에 대한 예외처리는 따로 안해놓음
 Client* Server::getClient(int fd) {return &(_ct_client.at(fd));}
