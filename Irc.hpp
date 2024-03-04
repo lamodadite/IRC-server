@@ -11,6 +11,7 @@
 # include <fcntl.h>
 # include <vector>
 # include <cstring>
+# include <netdb.h>
 # include <map>
 
 #endif

@@ -6,20 +6,25 @@
 class Client {
 	public:
 		Client(int client_fd);
-		~CLient();
+		Client(const Client& rhs);
+		Client& operator=(const Client& rhs);
+		~Client();
 
 		void addReadbuf(std::string str);
-		std::string& getReadbuf() const;
+		std::string& getReadbuf();
 
 		bool&	getRegistered();
 		bool&	getInfocomplete();
 		bool&	getPasswdclear();
 
+		void	setNickname(std::string msg);
+		void	setUsername(std::string msg);
+		void	checkRegistered();
+		void	addWriteBuf(std::string rhs);
+		std::string	getWriteBuf();
 
 	private:
 		Client();
-		Client(const Client& rhs);
-		Client& operator=(const Client& rhs);
 
 		int _client_fd;
 		int _info_cnt;
@@ -34,6 +39,8 @@ class Client {
 		bool	_registered;
 		bool	_infocomplete;
 		bool	_passwdclear;
+		bool	_nickname_on;
+		bool	_username_on;
 };
 
 #endif

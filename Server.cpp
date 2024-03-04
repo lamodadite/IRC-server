@@ -1,34 +1,22 @@
 #include "Server.hpp"
 
 // 쓸일없어서 private
-Server::Server();
+Server::Server() {}
 Server::Server(const Server& rhs) {(void)rhs;}
 Server& Server::operator=(const Server& rhs) {(void)rhs; return *this;}
 
-Server::Server(std:: string port, std::string passwd) : _port(port), _passwd(passwd) {
-	std::cout << "Starting Server\n";
-	memset(_hints, 0, sizeof(_hints));
-	// IPv4 주소 패밀리 사용
-	this->_hints.ai_family = AF_INET;
-	// TCP 스트림 소켓
-	this->_hints.ai_socktype = SOCK_STREAM;
-	// AI_PASSIVE 수신 대기 소켓을 생성
-	this->_hints.ai_flags = AI_PASSIVE;
-}
+Server::Server(std:: string port, std::string passwd) : _port(port), _passwd(passwd) {std::cout << "Starting Server\n";}
 
 Server::~Server() {std::cout << "Closing Server\n";}
 
 void Server::setServerinfo(char *port) {
-	// 포트 변환하기 편함, 첫인자는 호스트명이나 ip주소 문자열. 우린 로컬이니 0.
-	if (getaddrinfo(0, port, &_hints, &_serv_adr) < 0) {
-		std::cerr << "Failed to set Server Addrinfo\n";
-		throw std::exception();
-	}
-	return 0;
+	_serv_adr.sin_family = AF_INET;
+	_serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
+	_serv_adr.sin_port = htons(atoi(port));
 }
 
-void setServerSocket() {
-	if ((this->_server_fd = socket(_serv_adr->ai_family, _serv_adr->ai_socktype, _serv_adr->ai_protocol)) < 0) {
+void Server::setServerSocket() {
+	if ((this->_server_fd = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
 		std::cerr << "Socket failed\n";
 		throw std::exception();
 	}
@@ -47,7 +35,7 @@ void setServerSocket() {
 	}
 
 	// Bind socket to port
-	if (bind(_server_fd, _serv_adr, sizeof(_serv_adr)) < 0) {
+	if (bind(_server_fd, reinterpret_cast<struct sockaddr*>(&_serv_adr), sizeof(_serv_adr)) < 0) {
 		std::cerr << "Bind failed\n";
 		throw std::exception();
 	}
@@ -64,8 +52,6 @@ void setServerSocket() {
 		throw std::exception();
 	}
 
-	// getaddrinfo 함수로 동적 할당된 메모리를 해제해주는 작업.
-	freeaddrinfo(_serv_adr);
 	return ;
 }
 
@@ -119,7 +105,7 @@ void Server::recvMsgFromClient(int fd) {
 		// HTTP 프로토콜에서 \r\n 줄바꿈을 나타냄. npos는 못찾았을경우 나오는 반환값
 		// 자료를 덜받았으면 readbuf에 쌓아두고 더 수신을 기다림.
 		// 마지막에 \r\n이와서 정보가 완전할때만 처리
-		if (client->getReadbuf().find("\r\n") == client->getReadbuf().size() - 2) {
+		if (client->getReadbuf().rfind("\r\n") == client->getReadbuf().size() - 2) {
 			//client 정보 채우기랑 명령어들 구분하는법 공부하고 적용하기 여기가 제일 중요!!
 			parseReadbuf(fd, client);
 			//사용한 버퍼 처리 레퍼런스로 반환해서 clear가능 *유기*
@@ -141,18 +127,36 @@ void Server::parseReadbuf(int fd, Client* client) {
 			if (client->getInfocomplete() == true) {
 				// client가 등록 되었다는 것을 알림. 알려야하는 내용들은 문서에서
 				sendClientRegistered(fd, client);
-				client->getRegistered = true;
+				client->getRegistered() = true;
 			} else {
 				// 
 			}
-		} else {
-			checkCommand(client, msg[i]);
-		}
+		} 
+		// else {
+			// checkCommand(client, msg[i]);
+		// }
 	}
 }
 
+void Server::sendClientRegistered(int fd, Client* client) {
+	client->addWriteBuf("asd");
+	send(fd, client->getWriteBuf().c_str(), client->getWriteBuf().size(), 0);
+}
+
 void Server::fillClientInfo(Client* client, std::string msg) {
-	
+	if (!strncmp("NICK", msg.c_str(), 4)) {
+		msg.erase(0, 5);
+		client->setNickname(msg);
+	} else if (!strncmp("USER", msg.c_str(), 4)) {
+		msg.erase(0, 5);
+		client->setUsername(msg);
+	} else if (!strncmp("PASS", msg.c_str(), 4)) {
+		msg.erase(0, 5);
+		if (msg == _passwd) {
+			client->getPasswdclear() = 1;
+		}
+	}
+	client->checkRegistered();
 }
 
 void Server::splitReadbuf(std::vector<std::string>& msg, Client* client) {
@@ -165,19 +169,19 @@ void Server::splitReadbuf(std::vector<std::string>& msg, Client* client) {
 	while ((idx = readbuf.find("\r\n")) != std::string::npos) {
 		tmp = readbuf.substr(0, idx);
 		msg.push_back(tmp);
-		tmp.erase(0, idx + 2);
+		readbuf.erase(0, idx + 2);
 	}
 }
 
-void Server::sendMsgToClent(int fd, char buffer[], int bytesRecieved) {
-	// Echo back to the client
-	send(fd, buffer, bytesRecieved, 0);
-}
+// void Server::sendMsgToClent(int fd, char buffer[], int bytesRecieved) {
+// 	// Echo back to the client
+// 	send(fd, buffer, bytesRecieved, 0);
+// }
 
 void Server::disconnectClient(int fd) {
 	close(fd);
-	EV_SET(_change_list[0], fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
-	EV_SET(_change_list[1], fd, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
+	EV_SET(&_change_list[0], fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
+	EV_SET(&_change_list[1], fd, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
 	kevent(_kq_fd, _change_list, 2, NULL, 0, NULL);
 }
 
@@ -200,9 +204,10 @@ void Server::acceptNewClient() {
 		registerSocketToKqueue(newSocket);
 		_ct_client.insert(std::pair<int, Client>(newSocket, new_client));
 		std::cout << "New connection accepted from " << inet_ntoa(clntAddr.sin_addr) << '\n';
-	} else {
-		tooManyClient(newSocket);
 	} 
+	// else {
+		// tooManyClient(newSocket);
+	// } 
 }
 
 void Server::registerSocketToKqueue(int socketFd) {

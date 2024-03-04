@@ -3,6 +3,7 @@
 
 # include "Irc.hpp"
 # include "Client.hpp"
+# include "Channel.hpp"
 
 # define MAX_EVENTS 16
 # define MAX_CLIENT 20
@@ -20,6 +21,9 @@ class Server {
 		void	recvMsgFromClient(int fd);
 		void	parseReadbuf(int fd, Client* client); 
 		void	fillClientInfo(Client* client, std::string msg);
+		void	splitReadbuf(std::vector<std::string>& msg, Client* client);
+		void	registerSocketToKqueue(int socketFd);
+		void	sendClientRegistered(int fd, Client* client);
 
 		Client* getClient(int fd);
 
@@ -36,8 +40,7 @@ class Server {
 		struct kevent	_change_list[2];
 		struct kevent	_event_list[MAX_EVENTS];
 
-		struct addrinfo	*_serv_adr;
-		struct addrinfo	_hints;
+		struct sockaddr_in	_serv_adr;
 
 		std::string _port;
 		std::string _passwd;
