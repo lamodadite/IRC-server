@@ -1,36 +1,69 @@
 #include "Client.hpp"
 
 Client::Client() {};
-Client::Client(const Client& rhs): _client_fd(rhs._client_fd), _info_cnt(rhs._info_cnt), _registered(rhs._registered), _infocomplete(rhs._registered), _passwdclear(rhs._passwdclear), _nickname_on(rhs._nickname_on), _username_on(rhs._username_on) {}
+
+Client::Client(const Client& rhs)
+			: clientFd(rhs.clientFd), infoCnt(rhs.infoCnt), 
+			readBuffer(rhs.readBuffer), sendBuffer(rhs.sendBuffer), 
+			nickname(nickname), username(username), realname(realname), 
+			oldNickname(oldNickname), registered(rhs.registered), 
+			infoComplete(rhs.infoComplete), passwordClear(rhs.passwordClear), 
+			nicknameOn(rhs.nicknameOn), usernameOn(rhs.usernameOn) {}
+
 Client& Client::operator=(const Client& rhs) {(void)rhs; return *this;}
 
-Client::Client(int client_fd): _client_fd(client_fd), _info_cnt(0), _registered(false), _infocomplete(false), _passwdclear(false), _nickname_on(false), _username_on(false) {}
+Client::Client(const int& clientFd)
+			: clientFd(clientFd), infoCnt(0), readBuffer(""), 
+			sendBuffer(""), nickname(""), username(""), realname(""), 
+			oldNickname(""), registered(false), infoComplete(false), 
+			passwordClear(false), nicknameOn(false), usernameOn(false) {}
 
 Client::~Client() {}
 
-void Client::addReadbuf(std::string str) {_readbuf += str;}
+const std::string&	Client::getReadBuffer() const {return readBuffer;}
 
-std::string& Client::getReadbuf() {return _readbuf;}
+const std::string&	Client::getWriteBuffer() const {return sendBuffer;}
 
-bool&	Client::getInfocomplete() {return _infocomplete;}
+void	Client::addReadBuffer(const std::string& str) {readBuffer += str;}
 
-bool&	Client::getPasswdclear() {return _passwdclear;}
+void	Client::addWriteBuffer(const std::string& str) {sendBuffer += str;}
 
-bool&	Client::getRegistered() {return _registered;}
+bool	Client::getInfocomplete() {return infoComplete;}
 
-void	Client::setNickname(std::string msg) {_nickname = msg; _nickname_on = true;}
+bool	Client::getPasswordclear() {return passwordClear;}
 
-void	Client::setUsername(std::string msg) {_username = msg; _username_on = true;}
+bool	Client::getRegistered() {return registered;}
 
-void	Client::checkRegistered() {
-	if (_nickname_on && _username_on && _passwdclear)
-		_infocomplete = true;
+const std::string&	Client::getNickname() const {return nickname;}
+
+void	Client::setNickname(const std::string& nickname) {
+	this->nickname = nickname;
+	nicknameOn = true;
 }
 
-std::string	Client::getWriteBuf() {return _sendbuf;}
+void	Client::setUsername(const std::string& username) {
+	this->username = username;
+	usernameOn = true;
+}
 
-void	Client::addWriteBuf(std::string rhs) {
-	_sendbuf += rhs + ' ';
-	_sendbuf += _nickname + ' ';
-	_sendbuf += _username + '\n';
+void	Client::checkInfoCompleted() {
+	if (nicknameOn && usernameOn && passwordClear)
+		infoComplete = true;
+}
+
+bool	Client::hasCompleteMessage() {
+	if (readBuffer.find("\r\n") != std::string::npos) return true;
+	return false;
+}
+
+void	Client::deleteReadBuffer() {
+	size_t pos;
+	while ((pos = readBuffer.find("\r\n")) != std::string::npos)
+		readBuffer.erase(0, pos + 2);
+}
+
+void	Client::deleteWriteBuffer() {
+	size_t pos;
+	while ((pos = sendBuffer.find("\r\n")) != std::string::npos)
+		sendBuffer.erase(0, pos + 2);
 }

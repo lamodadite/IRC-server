@@ -5,42 +5,48 @@
 
 class Client {
 	public:
-		Client(int client_fd);
+		Client(const int& clientFd);
 		Client(const Client& rhs);
-		Client& operator=(const Client& rhs);
 		~Client();
 
-		void addReadbuf(std::string str);
-		std::string& getReadbuf();
+		const std::string& getNickname() const;
+		bool	getRegistered();
+		bool	getInfocomplete();
+		bool	getPasswordclear();
+		const std::string&	getReadBuffer() const;
+		const std::string&	getWriteBuffer() const;
 
-		bool&	getRegistered();
-		bool&	getInfocomplete();
-		bool&	getPasswdclear();
+		void	checkInfoCompleted();
 
-		void	setNickname(std::string msg);
-		void	setUsername(std::string msg);
-		void	checkRegistered();
-		void	addWriteBuf(std::string rhs);
-		std::string	getWriteBuf();
+		void	setNickname(const std::string& nickname);
+		void	setUsername(const std::string& username);
+		void	addReadBuffer(const std::string& str);
+		void	addWriteBuffer(const std::string& str);
+
+		void	deleteReadBuffer();
+		void	deleteWriteBuffer();
+
+		bool	hasCompleteMessage();
 
 	private:
 		Client();
+		Client& operator=(const Client& rhs);
 
-		int _client_fd;
-		int _info_cnt;
+		int clientFd;
+		int infoCnt;
 
-		std::string	_readbuf;
-		std::string	_sendbuf;
-		std::string	_nickname;
-		std::string	_username;
-		std::string	_realname;
-		std::string	_old_nickname;
+		std::string	readBuffer;
+		std::string	sendBuffer;
+		std::string	nickname;
+		std::string	username;
+		std::string	realname;
+		std::string	oldNickname;
 
-		bool	_registered;
-		bool	_infocomplete;
-		bool	_passwdclear;
-		bool	_nickname_on;
-		bool	_username_on;
+		bool	registered;
+		bool	infoComplete;
+		bool	passwordClear;
+		bool	nicknameOn;
+		bool	usernameOn;
 };
 
 #endif

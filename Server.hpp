@@ -4,49 +4,43 @@
 # include "Irc.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-
-# define MAX_EVENTS 16
-# define MAX_CLIENT 20
+# include "Resource.hpp"
+# include "MessageHandler.hpp"
 
 class Server {
 	public:
-		Server(std::string port, std::string passwd);
+		Server(const int& port, const std::string& passwd);
 		~Server();
 		
-		void	setServerinfo(char *port);
-		void	setServerSocket();
+		void	initServerinfo();
+		void	initServerSocket();
 		void	networkProcess();
 		void	acceptNewClient();
-		void	disconnectClient(int fd);
-		void	recvMsgFromClient(int fd);
-		void	parseReadbuf(int fd, Client* client); 
-		void	fillClientInfo(Client* client, std::string msg);
-		void	splitReadbuf(std::vector<std::string>& msg, Client* client);
-		void	registerSocketToKqueue(int socketFd);
-		void	sendClientRegistered(int fd, Client* client);
-
-		Client* getClient(int fd);
 
 	private:
 		Server();
 		Server(const Server& rhs);
 		Server& operator=(const Server& rhs);
 
-		int	_server_fd;
-		int _kq_fd;
-		int _event_cnt;
+		void	disconnectClient(const int& fd);
+		void	recieveMessageFromClient(const int& fd);
+		void	sendMessageToClient(const int& fd);
+		void	registerSocketToKqueue(const int& socketFd);
 
-		// read write 둘 다 설정하기 위해서 2짜리 배열
-		struct kevent	_change_list[2];
-		struct kevent	_event_list[MAX_EVENTS];
+		static const int	MAX_EVENTS = 16;
+		static const int	MAX_CLIENT = 20;
 
-		struct sockaddr_in	_serv_adr;
+		struct kevent	eventList[MAX_EVENTS];
+		struct kevent	changeList[2];
+		struct sockaddr_in	servAddr;
+		
+		Resource resource;
+		MessageHandler messageHandler;
 
-		std::string _port;
-		std::string _passwd;
-
-		std::map<std::string, Channel>	_ct_channel;
-		std::map<int, Client> 					_ct_client;
+		std::string	password;
+		int	port;
+		int	serverFd;
+		int	kqFd;
 };
 
 #endif
