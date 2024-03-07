@@ -23,6 +23,8 @@ class Channel {
 		const std::string& getName() const;
 		const std::string& getTopic() const;
 		const std::string& getMode() const;
+		const std::string& getKey() const;
+		const std::set<Client*>& getClientList() const;
 		const size_t& getUserLimit() const;
 
 		void	setName(const std::string& name);
@@ -36,6 +38,7 @@ class Channel {
 		void	inviteClient(Client* client);
 		bool	hasMode(const char mode) const;
 		bool	checkInvited(Client* client) const;
+
 
 	private:
 		Channel();

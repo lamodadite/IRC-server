@@ -2,10 +2,9 @@
 #define TOPIC_HPP
 
 # include "Irc.hpp"
+# include "Command.hpp"
 
 class Topic : public Command {
-	private:
-
 	public:
 		Topic();
 		Topic(const Topic& rhs);
@@ -13,6 +12,7 @@ class Topic : public Command {
 		~Topic();
 
 		void execute(Resource& resource, Message message);
+	private:
 };
 
 #endif

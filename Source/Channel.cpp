@@ -33,6 +33,8 @@ void Channel::removeInvited(Client *client) {invitedList.erase(client);}
 const std::string& Channel::getName() const {return name;}
 const std::string& Channel::getTopic() const {return topic;}
 const std::string& Channel::getMode() const {return mode;}
+const std::string& Channel::getKey() const {return key;}
+const std::set<Client*>& Channel::getClientList() const {return clientList;}
 const size_t& Channel::getUserLimit() const {return userLimit;}
 
 void Channel::setName(const std::string& name) {this->name = name;}

@@ -14,7 +14,9 @@ class Join : public Command {
 		void	execute(Resource& resource, Message message);
 
 	private:
+		void	sendMessageToChannel(Channel* channel, std::string message);
 		void	splitByComma(std::vector<std::string>& target, std::string param);
-};
+		bool	hasControlG(std::string param);
+};	
 
 #endif

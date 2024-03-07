@@ -2,10 +2,9 @@
 #define MODE_HPP
 
 # include "Irc.hpp"
+# include "Command.hpp"
 
 class Mode : public Command {
-	private:
-
 	public:
 		Mode();
 		Mode(const Mode& rhs);
@@ -13,6 +12,9 @@ class Mode : public Command {
 		~Mode();
 
 		void execute(Resource& resource, Message message);
+
+	private:
+		void parseModeString(Message &message);
 };
 
 #endif
