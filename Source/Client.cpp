@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
 Client::Client() {};
 
@@ -27,6 +28,10 @@ void	Client::addReadBuffer(const std::string& str) {readBuffer += str;}
 
 void	Client::addWriteBuffer(const std::string& str) {sendBuffer += str;}
 
+void	Client::addJoinedChannel(Channel* channel) {joinedChannel.insert(channel);}
+
+void	Client::addInvitedChannel(Channel* channel) {invitedChannel.insert(channel);}
+
 void	Client::setPassed(const bool& passed) {this->passed = passed;}
 
 const bool&	Client::getPassed() const {return passed;}
@@ -34,6 +39,8 @@ const bool&	Client::getPassed() const {return passed;}
 const bool&	Client::getRegistered() const {return registered;}
 
 const std::string&	Client::getNickname() const {return nickname;}
+
+const int& Client::getClientFd() const {return clientFd;}
 
 void	Client::setNickname(const std::string& nickname) {
 	this->nickname = nickname;
@@ -66,6 +73,8 @@ void	Client::deleteWriteBuffer() {
 		sendBuffer.erase(0, pos + 2);
 }
 
+void	Client::deleteJoinedChannel(Channel* channel) {joinedChannel.erase(channel);}
+
 bool	Client::canBeRegistered() {
 	if (nicknameOn && usernameOn && passed) {
 		registered = true;
@@ -73,3 +82,4 @@ bool	Client::canBeRegistered() {
 	}
 	return false;
 }
+

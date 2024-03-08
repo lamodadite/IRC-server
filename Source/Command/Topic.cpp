@@ -24,11 +24,27 @@ void Topic::execute(Resource& resource, Message message) {
 		return;
 	}
 	if (message.getParam().size() == 2) {
-		channel->setTopic("");
-		
+		if (channel->getTopic() == "") {
+
+		} else {
+			channel->setTopic("");
+
+		}
+	}	else {
+		if (channel->getTopic() == message.getParam()[2]) {
+
+		} else {
+			channel->setTopic(message.getParam()[2]);
+
+		}	
 	}
-  else {
-		channel->setTopic(message.getParam()[2]);
-		
+}
+
+void	Topic::sendMessageToChannel(Channel* channel, std::string message) {
+	const std::set<Client*>& clientList = channel->getClientList();
+
+	std::set<Client*>::iterator iter;
+	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
+		(*iter)->addWriteBuffer(message);
 	}
 }

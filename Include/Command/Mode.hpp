@@ -14,7 +14,7 @@ class Mode : public Command {
 		void execute(Resource& resource, Message message);
 
 	private:
-		void parseModeString(Message &message);
+		void parseModeString(Channel& channel, Message &message);
 };
 
 #endif

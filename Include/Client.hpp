@@ -3,6 +3,8 @@
 
 # include "Irc.hpp"
 
+class Channel;
+
 class Client {
 	public:
 		Client(const int& clientFd);
@@ -15,6 +17,7 @@ class Client {
 		const bool&	getPassed() const;
 		const std::string&	getReadBuffer() const;
 		const std::string&	getWriteBuffer() const;
+		const int& getClientFd() const;
 
 		void	setPassed(const bool& passed);
 		void	setNickname(const std::string& nickname);
@@ -22,9 +25,12 @@ class Client {
 		void	setUsername(const std::string& username);
 		void	addReadBuffer(const std::string& str);
 		void	addWriteBuffer(const std::string& str);
+		void	addJoinedChannel(Channel* channel);
+		void	addInvitedChannel(Channel* channel);
 
 		void	deleteReadBuffer();
 		void	deleteWriteBuffer();
+		void	deleteJoinedChannel(Channel* channel);
 
 		bool	hasCompleteMessage();
 		bool	canBeRegistered();
@@ -37,6 +43,7 @@ class Client {
 		int infoCnt;
 
 		std::set<Channel *>	joinedChannel;
+		std::set<Channel *>	invitedChannel;
 		std::string	readBuffer;
 		std::string	sendBuffer;
 		std::string	nickname;

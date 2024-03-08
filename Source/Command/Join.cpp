@@ -43,6 +43,7 @@ void Join::execute(Resource& resource, Message message) {
 			}
 		}
 		channel->addClient(client);
+		client->addJoinedChannel(channel);
 		sendMessageToChannel(channel, client->getNickname() 
 				+ " is joining the channel " + channels[i] + '\n');
 		if (channel->getTopic().size()) ;//RPL_TOPIC

@@ -13,6 +13,7 @@ class Topic : public Command {
 
 		void execute(Resource& resource, Message message);
 	private:
+		void	sendMessageToChannel(Channel* channel, std::string message);
 };
 
 #endif

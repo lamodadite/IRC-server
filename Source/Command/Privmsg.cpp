@@ -28,11 +28,6 @@ void	Privmsg::execute(Resource& resource, Message message) {
 	splitByComma(target, message.getParam()[1]);
 	for (size_t i = 0; i < target.size(); i++) {
 		if (target[i][0] == '#' || target[i][0] == '&') {
-			if (resource.findClient(target[i]) == NULL) {
-				// ERR_NOSUCHNICK
-				return;
-			}
-		} else {
 			Channel* channel = resource.findChannel(target[i]);
 			if (channel == NULL) {
 				// ERR_NOSUCHNICK(CHANNEL)
@@ -41,21 +36,29 @@ void	Privmsg::execute(Resource& resource, Message message) {
 				// ERR_CANNOTSENDTOCHAN
 				return;
 			}
+		} else {
+			if (resource.findClient(target[i]) == NULL) {
+				// ERR_NOSUCHNICK
+				return;
+			}
 		}
 	}
 	if (message.getParam().size() < 3) {
 		// ERR_NOTEXTTOSEND
 		return;
 	}
+	// TODO: Response Message..
+	// :<nickname> PRIVMSG <target> <comment>
 	for (size_t i = 0; i < target.size(); i++) {
-		if (target[i][0] == '#' || target[i][0] == '&')
-			resource.findClient(target[i])->addWriteBuffer(message.getParam()[2] + "\r\n");
-		else {
+		if (target[i][0] == '#' || target[i][0] == '&') {
 			const std::set<Client*>& clientList = resource.findChannel(target[i])->getClientList();
 			std::set<Client*>::iterator it;
-			for (it = clientList.begin(); it != clientList.end(); it++)
+			for (it = clientList.begin(); it != clientList.end(); it++) {
+				if ((*it)->getClientFd() != client->getClientFd())
 				(*it)->addWriteBuffer(message.getParam()[2] + "\r\n");
+			}
 		}
+		else
+			resource.findClient(target[i])->addWriteBuffer(message.getParam()[2] + "\r\n");
 	}
-	// :<nickname> PRIVMSG <target> <comment>
 }

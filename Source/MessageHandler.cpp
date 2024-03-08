@@ -51,7 +51,10 @@ void	MessageHandler::splitToParam(std::string& splitedBuffer, Message& message) 
 		params.push_back(tmp);
 		splitedBuffer.erase(0, index + 1);
 	}
-	if (splitedBuffer.size()) params.push_back(splitedBuffer);
+	if (splitedBuffer.size()) {
+		if (splitedBuffer[0] == ':') splitedBuffer.erase(0, 1);
+		params.push_back(splitedBuffer);
+	}
 	message.setParam(params);
 	message.setFirstParam(params[0]);
 	if (isCommand(params[0])) message.setIsCommand(true);
