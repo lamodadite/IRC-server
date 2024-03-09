@@ -88,6 +88,7 @@ void Server::recieveMessageFromClient(const int& fd) {
 			std::vector<Message> messages;
 			messageHandler.handleMessage(messages, fd, client->getReadBuffer());
 			for (size_t i = 0; i < messages.size(); i++) {
+				std::cout << messages[i].getFirstParam() << '\n';
 				Command* command = resource.findCommand(messages[i].getFirstParam());
 				if (command != NULL)
 					command->execute(resource, messages[i]);
