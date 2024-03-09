@@ -39,16 +39,16 @@ void	MessageHandler::splitToParam(std::string& splitedBuffer, Message& message) 
 	while (true) {
 		index = splitedBuffer.find(' ');
 		colonIndex = splitedBuffer.find(':');
-		if (colonIndex != std::string::npos && colonIndex < index) {
+		if (colonIndex != std::string::npos && (colonIndex < index || index == std::string::npos) ) {
 			tmp = splitedBuffer.substr(0, colonIndex);
-			params.push_back(tmp);
+			if (tmp.size()) params.push_back(tmp);
 			splitedBuffer.erase(0, colonIndex);
 			break ;
 		} else if (index == std::string::npos) {
 			break ;
 		}
 		tmp = splitedBuffer.substr(0, index);
-		params.push_back(tmp);
+		if (tmp.size()) params.push_back(tmp);
 		splitedBuffer.erase(0, index + 1);
 	}
 	if (splitedBuffer.size()) {
@@ -58,6 +58,9 @@ void	MessageHandler::splitToParam(std::string& splitedBuffer, Message& message) 
 	message.setParam(params);
 	message.setFirstParam(params[0]);
 	if (isCommand(params[0])) message.setIsCommand(true);
+	for (size_t i = 0 ; i < params.size(); i++) {
+		std::cout << params[i] << '\n';
+	}
 }
 
 bool	MessageHandler::isCommand(const std::string& param) {
