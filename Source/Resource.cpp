@@ -77,3 +77,5 @@ void	Resource::removeClientFromChannel(Client* client) {
 		it->second.removeOperator(client);
 	}
 }
+
+void	Resource::setPassword(const std::string& password) {this->password = password;}

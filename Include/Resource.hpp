@@ -20,6 +20,7 @@ class Resource {
 		Channel*	findChannel(const std::string& name);
 		Command*	findCommand(const std::string& prefix);
 		
+		void	setPassword(const std::string& password);
 		void	addClient(const int& fd);
 		void	addChannel(const std::string& name);
 		void	removeClient(const int& fd);

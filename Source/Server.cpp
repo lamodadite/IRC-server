@@ -11,6 +11,7 @@ Server::Server(const int& port, const std::string& password)
 Server::~Server() {std::cout << "Closing Server\n";}
 
 void Server::initServerinfo() {
+	resource.setPassword(password);
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	servAddr.sin_port = htons(port);
@@ -72,7 +73,8 @@ void Server::networkProcess() {
 void Server::recieveMessageFromClient(const int& fd) {
 	Client* client = resource.findClient(fd);
 
-	char buffer[1024] = {0};
+	char buffer[1024];
+	memset(buffer, 0, sizeof(buffer));
 	ssize_t bytesRecieved = recv(fd, buffer, sizeof(buffer), 0);
 	if (bytesRecieved <= 0) {
 		if (bytesRecieved == 0 || errno != EAGAIN)
@@ -81,11 +83,7 @@ void Server::recieveMessageFromClient(const int& fd) {
 			std::cerr << "Recv failed\n";
 		disconnectClient(fd);
 	} else {
-		std::cout << "Received: " << buffer << '\n';
 		client->addReadBuffer(buffer);
-		std::string tmp = client->getReadBuffer();
-		for (size_t i = 0; i < tmp.size(); i++)
-			std::cout << (int)tmp[i] << '\n';
 		if (client->hasCompleteMessage()) {
 			std::vector<Message> messages;
 			messageHandler.handleMessage(messages, fd, client->getReadBuffer());
@@ -95,9 +93,7 @@ void Server::recieveMessageFromClient(const int& fd) {
 					command->execute(resource, messages[i]);
 			}
 			client->deleteReadBuffer();
-			std::cout << "this is readbuffer : " << client->getReadBuffer() << std::endl;
 		}
-		std::cout << "test\n";
 	}
 }
 
