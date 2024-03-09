@@ -1,13 +1,13 @@
 #include "Privmsg.hpp"
 
 Privmsg::Privmsg() { }
-Privmsg::Privmsg(const Privmsg& rhs) { }
-Privmsg& Privmsg::operator=(const Privmsg& rhs) { }
+Privmsg::Privmsg(const Privmsg& rhs) {(void) rhs;}
+Privmsg& Privmsg::operator=(const Privmsg& rhs) {(void)rhs;return *this;}
 Privmsg::~Privmsg() { }
 
 void	Privmsg::splitByComma(std::vector<std::string>& target, std::string param) {
 	std::string	tmp;
-	int					index;
+	size_t					index;
 
 	while ((index = param.find(',')) != std::string::npos) {
 		tmp = param.substr(0, index);
@@ -21,8 +21,9 @@ void	Privmsg::execute(Resource& resource, Message message) {
 	std::vector<std::string> target;
 	Client* client = resource.findClient(message.getClientFd());
 
+	if (!client->getRegistered()) return;
 	if (message.getParam().size() < 2) {
-		// ERR_NORECIPIENT
+		reply.errNoRecipient(client, "PRIVMSG");
 		return;
 	}
 	splitByComma(target, message.getParam()[1]);
@@ -30,24 +31,23 @@ void	Privmsg::execute(Resource& resource, Message message) {
 		if (target[i][0] == '#' || target[i][0] == '&') {
 			Channel* channel = resource.findChannel(target[i]);
 			if (channel == NULL) {
-				// ERR_NOSUCHNICK(CHANNEL)
+				reply.errNoSuchNick(client, target[i]);
 				return;
 			} else if (!channel->hasClient(client)) {
-				// ERR_CANNOTSENDTOCHAN
+				reply.errCannotSendToChan(client, channel);
 				return;
 			}
 		} else {
 			if (resource.findClient(target[i]) == NULL) {
-				// ERR_NOSUCHNICK
+				reply.errNoSuchNick(client, target[i]);
 				return;
 			}
 		}
 	}
 	if (message.getParam().size() < 3) {
-		// ERR_NOTEXTTOSEND
+		reply.errNoTextToSend(client);
 		return;
 	}
-	// TODO: Response Message..
 	// :<nickname> PRIVMSG <target> <comment>
 	for (size_t i = 0; i < target.size(); i++) {
 		if (target[i][0] == '#' || target[i][0] == '&') {
@@ -55,10 +55,19 @@ void	Privmsg::execute(Resource& resource, Message message) {
 			std::set<Client*>::iterator it;
 			for (it = clientList.begin(); it != clientList.end(); it++) {
 				if ((*it)->getClientFd() != client->getClientFd())
-				(*it)->addWriteBuffer(message.getParam()[2] + "\r\n");
+					SendMessageToClient(client, target[i], message.getParam()[2]);
 			}
 		}
-		else
-			resource.findClient(target[i])->addWriteBuffer(message.getParam()[2] + "\r\n");
+		else {
+			SendMessageToClient(client, target[i], message.getParam()[2]);
+		}
 	}
+}
+
+void	Privmsg::SendMessageToClient(Client* client, const std::string &target, const std::string comment) {
+	std::string message;
+	
+	message = ":" + client->getNickname() + " PRIVMSG ";
+	message += target + " :" + comment + "\r\n";
+	client->addWriteBuffer(message);
 }

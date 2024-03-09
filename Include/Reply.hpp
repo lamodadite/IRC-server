@@ -2,7 +2,11 @@
 #define REPLY_HPP
 
 # include "Irc.hpp"
-# include "Resource.hpp"
+//# include "Resource.hpp"
+
+class Client;
+class Command;
+class Channel;
 
 class Reply	{
 	public:
@@ -11,7 +15,6 @@ class Reply	{
 		Reply& operator=(const Reply& rhs);
 		~Reply();
 
-		void	sendToClient(Client* client, Resource& resource, Message& message);
 		void	errNeedMoreParams(Client* client, const std::string& command);
 		void	errAlreadyRegistered(Client* client);
 		void	errPasswdMisMatch(Client* client);

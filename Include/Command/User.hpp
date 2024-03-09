@@ -3,6 +3,9 @@
 
 # include "Irc.hpp"
 # include "Command.hpp"
+# include "Resource.hpp"
+
+class Resource;
 
 class User : public Command {
 	public:

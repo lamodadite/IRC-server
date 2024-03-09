@@ -6,8 +6,8 @@ Client::Client() {};
 Client::Client(const Client& rhs)
 			: clientFd(rhs.clientFd), infoCnt(rhs.infoCnt), 
 			readBuffer(rhs.readBuffer), sendBuffer(rhs.sendBuffer), 
-			nickname(nickname), username(username), realname(realname), 
-			oldNickname(oldNickname), registered(rhs.registered), 
+			nickname(rhs.nickname), username(rhs.username), realname(rhs.realname), 
+			oldNickname(rhs.oldNickname), registered(rhs.registered), 
 			passed(rhs.passed), nicknameOn(rhs.nicknameOn), usernameOn(rhs.usernameOn) {}
 
 Client& Client::operator=(const Client& rhs) {(void)rhs; return *this;}

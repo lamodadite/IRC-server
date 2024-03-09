@@ -1,13 +1,13 @@
 #include "Mode.hpp"
 
 Mode::Mode() { }
-Mode::Mode(const Mode& rhs) { }
-Mode& Mode::operator=(const Mode& rhs) { }
-Mode::~Mode() { }
+Mode::Mode(const Mode& rhs) {(void)rhs;}
+Mode& Mode::operator=(const Mode& rhs) {(void)rhs; return *this;}
+Mode::~Mode() {}
 
 void Mode::parseModeString(Channel& channel, Message &message) {
 	const std::vector<std::string>& param = message.getParam();
-
+	(void)channel;
 	// [<modestring> [<mode arguments] ...]
 	// i, t, k, o, l
 	// MODE +kl asd 15
@@ -24,9 +24,9 @@ void Mode::parseModeString(Channel& channel, Message &message) {
 			argument.push_back(param[i]);
 	}
 
-	size_t argumentIndex = 0;
+	//size_t argumentIndex = 0;
 	for (size_t i = 0; i < modestring.size(); i++) {
-		int addFlag = modestring[i][0] == '+' ? 1 : 0;
+		//int addFlag = modestring[i][0] == '+' ? 1 : 0;
 		for (size_t j = 1; j < modestring[i].size(); j++) {
 			
 		}
@@ -34,22 +34,24 @@ void Mode::parseModeString(Channel& channel, Message &message) {
 }
 
 void Mode::execute(Resource& resource, Message message) {
+	Client* client = resource.findClient(message.getClientFd());
+
+	if (!client->getRegistered()) return;
 	if (message.getParam().size() < 2) {
 		return ;
 	}
 	Channel* channel = resource.findChannel(message.getParam()[1]);
 	if (channel == NULL) {
-		// ERR_NOSUCHCHANNEL
+		reply.errNoSuchChannel(client, message.getParam()[1]);
 		return;
 	}
 	if (message.getParam().size() < 3) {
-		// RPL_CHANNELMODEIS
+		//reply.rplChannelModeIs()// RPL_CHANNELMODEIS
 		// RPL_CREATIONTIME
 		return;
 	}
-	Client* client = resource.findClient(message.getClientFd());
 	if (!channel->hasOperator(client)) {
-		// ERR_CHANOPRIVSNEEDED
+		reply.errChanOperIvsNeeded(client, channel);
 		return;
 	}
 	// :<nickname> MODE <channel>

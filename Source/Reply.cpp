@@ -1,11 +1,12 @@
 #include "Reply.hpp"
+#include "Resource.hpp"
 
 Reply::Reply() {}
-Reply::Reply(const Reply& rhs) {}
-Reply& Reply::operator=(const Reply& rhs) {}
+Reply::Reply(const Reply& rhs) {(void)rhs;}
+Reply& Reply::operator=(const Reply& rhs) {(void)rhs; return *this;}
 Reply::~Reply() {}
 
-void	Reply::errNeedMoreParams(Client* client, const std::string command) {
+void	Reply::errNeedMoreParams(Client* client, const std::string& command) {
 	std::string	buffer;
 
 	buffer += "461 " + client->getNickname() + ' ' + command + " :Not enough parameters\n";

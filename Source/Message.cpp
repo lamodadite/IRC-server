@@ -1,7 +1,7 @@
 #include "Message.hpp"
 
 Message::Message(): isCommand(false), clientFd(0) {}
-Message::Message(const Message& rhs) : isCommand(rhs.isCommand), clientFd(rhs.clientFd), param(rhs.param), firstParam(rhs.firstParam), originalMessage(rhs.originalMessage) {}
+Message::Message(const Message& rhs) : param(rhs.param), firstParam(rhs.firstParam), originalMessage(rhs.originalMessage), isCommand(rhs.isCommand), clientFd(rhs.clientFd) {}
 Message& Message::operator=(const Message& rhs) {
 	if (this == &rhs)
 		return *this;

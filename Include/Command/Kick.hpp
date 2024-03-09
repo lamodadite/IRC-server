@@ -3,6 +3,9 @@
 
 # include "Irc.hpp"
 # include "Command.hpp"
+# include "Resource.hpp"
+
+class Resource;
 
 class Kick : public Command {
 	public:
@@ -14,6 +17,7 @@ class Kick : public Command {
 		void execute(Resource& resource, Message message);
 
 	private:
+		void	SendMessageToClient(Client* client, Channel *channel, Client *kickedClient);
 };
 
 #endif

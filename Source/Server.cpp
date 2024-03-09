@@ -5,7 +5,7 @@ Server::Server(const Server& rhs) {(void)rhs;}
 Server& Server::operator=(const Server& rhs) {(void)rhs; return *this;}
 
 Server::Server(const int& port, const std::string& password)
-			: port(port), password(password)
+			: password(password), port(port)
 			{std::cout << "Starting Server\n";}
 
 Server::~Server() {std::cout << "Closing Server\n";}
@@ -83,6 +83,9 @@ void Server::recieveMessageFromClient(const int& fd) {
 	} else {
 		std::cout << "Received: " << buffer << '\n';
 		client->addReadBuffer(buffer);
+		std::string tmp = client->getReadBuffer();
+		for (size_t i = 0; i < tmp.size(); i++)
+			std::cout << (int)tmp[i] << '\n';
 		if (client->hasCompleteMessage()) {
 			std::vector<Message> messages;
 			messageHandler.handleMessage(messages, fd, client->getReadBuffer());
@@ -92,7 +95,9 @@ void Server::recieveMessageFromClient(const int& fd) {
 					command->execute(resource, messages[i]);
 			}
 			client->deleteReadBuffer();
+			std::cout << "this is readbuffer : " << client->getReadBuffer() << std::endl;
 		}
+		std::cout << "test\n";
 	}
 }
 

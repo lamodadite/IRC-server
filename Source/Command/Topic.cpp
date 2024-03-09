@@ -1,43 +1,38 @@
 #include "Topic.hpp"
 
-Topic::Topic() { }
-Topic::Topic(const Topic& rhs) { }
-Topic& Topic::operator=(const Topic& rhs) { }
-Topic::~Topic() { }
+Topic::Topic() {}
+Topic::Topic(const Topic& rhs) {(void)rhs;}
+Topic& Topic::operator=(const Topic& rhs) {(void)rhs;return *this;}
+Topic::~Topic() {}
 
 void Topic::execute(Resource& resource, Message message) {
 	Client*	client = resource.findClient(message.getClientFd());
 
+	if (!client->getRegistered()) return;
 	if (message.getParam().size() < 2) {
-		//ERR_NEEDMOREPARAMS
+		reply.errNeedMoreParams(client, message.getFirstParam());
 		return;
 	}
 	Channel* channel = resource.findChannel(message.getParam()[1]);
 	if (!channel) {
-		//ERR_NOSUCHCHANNEL
+		reply.errNoSuchChannel(client, message.getParam()[1]);
 		return;
 	} else if (!channel->hasClient(client)) {
-		//ERR_NOTONCHANNEL
+		reply.errNotOnChannel(client, channel);
 		return;
 	} else if (channel->hasMode('t') && !channel->hasOperator(client)) {
-		//ERR_CHANOPRIVSNEEDED
+		reply.errChanOperIvsNeeded(client, channel);
 		return;
 	}
 	if (message.getParam().size() == 2) {
-		if (channel->getTopic() == "") {
-
-		} else {
-			channel->setTopic("");
-
-		}
+		channel->setTopic("");
+		reply.rplNoTopic(client, channel);
 	}	else {
-		if (channel->getTopic() == message.getParam()[2]) {
-
-		} else {
-			channel->setTopic(message.getParam()[2]);
-
-		}	
+		channel->setTopic(message.getParam()[2]);
+		reply.rplTopic(client, channel);
+		//reply.rplTopicWhoTime(client, channel);
 	}
+	sendMessageToChannel(channel, "Topic: " + channel->getTopic() + '\n');
 }
 
 void	Topic::sendMessageToChannel(Channel* channel, std::string message) {

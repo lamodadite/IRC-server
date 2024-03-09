@@ -1,30 +1,31 @@
 #include "Invite.hpp"
 
-Invite::Invite() { }
-Invite::Invite(const Invite& rhs) { }
-Invite& Invite::operator=(const Invite& rhs) { }
+Invite::Invite() {}
+Invite::Invite(const Invite& rhs) {(void)rhs;}
+Invite& Invite::operator=(const Invite& rhs) {(void)rhs; return *this;}
 Invite::~Invite() { }
 
 void Invite::execute(Resource& resource, Message message) {
 	Client* client = resource.findClient(message.getClientFd());
 
+	if (!client->getRegistered()) return;
 	if (message.getParam().size() < 3) {
-		// ERR_NEEDMOREPARAMS
+		reply.errNeedMoreParams(client, message.getFirstParam());
 		return;
 	}
 	Client* invitedClient = resource.findClient(message.getParam()[1]);
 	Channel* channel = resource.findChannel(message.getParam()[2]);
 	if (channel == NULL) {
-		// ERR_NOSUCHCHANNEL
+		reply.errNoSuchChannel(client, message.getParam()[2]);
 		return;
 	} else if (!channel->hasClient(client)) {
-		// ERR_NOTONCHANNEL
+		reply.errNotOnChannel(client, channel);
 		return;
 	} else if (!channel->hasOperator(client)) {
-		// ERR_CHANOPRIVSNEEDED
+		reply.errChanOperIvsNeeded(client, channel);
 		return;
 	} else if (!channel->hasClient(invitedClient)) {
-		// ERR_USERONCHANNEL
+		reply.errUserOnChannel(client, message.getParam()[1], channel);
 		return;
 	}
 	// : <nickname> INVITE <invitedNickname>

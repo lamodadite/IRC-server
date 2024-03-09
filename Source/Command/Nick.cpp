@@ -1,9 +1,9 @@
 #include "Nick.hpp"
 
-Nick::Nick() { }
-Nick::Nick(const Nick& rhs) { }
-Nick& Nick::operator=(const Nick& rhs) { }
-Nick::~Nick() { }
+Nick::Nick() {}
+Nick::Nick(const Nick& rhs) {(void)rhs;}
+Nick& Nick::operator=(const Nick& rhs) {(void)rhs; return *this;}
+Nick::~Nick() {}
 
 bool Nick::isValidNickname(const std::string& nickname) const
 {
@@ -31,24 +31,36 @@ void Nick::execute(Resource& resource, Message message) {
 	Client*	client = resource.findClient(message.getClientFd());
 
 	if (message.getParam().size() < 2) {
-		// ERR_NONICKNAMEGIVEN;
+		reply.errNoNicknameGiven(client);
 		return ;
 	} else if (resource.findClient(message.getParam()[1]) == NULL) {
-		// ERR_NICKNAMEINUSE;
+		reply.errNicknameInUse(client);
 		return ;
 	} else if (!isValidNickname(message.getParam()[1])) {
-		// ERR_ERRONEUSNICKNAME;
+		reply.errErroneusNickname(client);
 		return ;
 	}
 	client->setOldNickname(client->getNickname());
 	client->setNickname(message.getParam()[1]);
 	if (client->getRegistered()) {
-		// : <oldNickname> NICK <nickname>
+		SendMessageToClient(client);
 	} else if (client->canBeRegistered()) {
 		fillWithWelcomeMessage(client);
 	}
 }
 
-void	Nick::fillWithWelcomeMessage(Client* client) {
+void	Nick::SendMessageToClient(Client* client) {
+	std::string message;
 	
+	message = ":" + client->getOldNickname();
+	message += " NICK " + client->getNickname() + "\r\n";
+	client->addWriteBuffer(message);
+}
+
+void	Nick::fillWithWelcomeMessage(Client* client) {
+	std::string message;
+
+	message = ":IRC_Server 001 " + client->getNickname();
+	message += " :Welcome to the IRC Server.\r\n";
+	client->addWriteBuffer(message);
 }
