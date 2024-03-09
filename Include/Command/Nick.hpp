@@ -19,7 +19,6 @@ class Nick : public Command {
 	private:
 		bool	isValidNickname(const std::string& nickname) const;
 		void	SendMessageToClient(Client* client);
-		void	fillWithWelcomeMessage(Client* client);
 };
 
 #endif

@@ -33,7 +33,7 @@ void Nick::execute(Resource& resource, Message message) {
 	if (message.getParam().size() < 2) {
 		reply.errNoNicknameGiven(client);
 		return ;
-	} else if (resource.findClient(message.getParam()[1]) == NULL) {
+	} else if (resource.findClient(message.getParam()[1]) != NULL) {
 		reply.errNicknameInUse(client);
 		return ;
 	} else if (!isValidNickname(message.getParam()[1])) {
@@ -44,8 +44,6 @@ void Nick::execute(Resource& resource, Message message) {
 	client->setNickname(message.getParam()[1]);
 	if (client->getRegistered()) {
 		SendMessageToClient(client);
-	} else if (client->canBeRegistered()) {
-		fillWithWelcomeMessage(client);
 	}
 }
 
@@ -54,13 +52,5 @@ void	Nick::SendMessageToClient(Client* client) {
 	
 	message = ":" + client->getOldNickname();
 	message += " NICK " + client->getNickname() + "\r\n";
-	client->addWriteBuffer(message);
-}
-
-void	Nick::fillWithWelcomeMessage(Client* client) {
-	std::string message;
-
-	message = ":IRC_Server 001 " + client->getNickname();
-	message += " :Welcome to the IRC Server.\r\n";
 	client->addWriteBuffer(message);
 }
