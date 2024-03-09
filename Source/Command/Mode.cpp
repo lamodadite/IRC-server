@@ -40,6 +40,8 @@ void Mode::execute(Resource& resource, Message message) {
 	if (message.getParam().size() < 2) {
 		return ;
 	}
+	if (message.getParam()[1][0] != '#' && message.getParam()[1][0] != '&')
+		return ;
 	Channel* channel = resource.findChannel(message.getParam()[1]);
 	if (channel == NULL) {
 		reply.errNoSuchChannel(client, message.getParam()[1]);
