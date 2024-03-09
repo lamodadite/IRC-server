@@ -88,7 +88,7 @@ void Server::recieveMessageFromClient(const int& fd) {
 			std::vector<Message> messages;
 			messageHandler.handleMessage(messages, fd, client->getReadBuffer());
 			for (size_t i = 0; i < messages.size(); i++) {
-				std::cout << messages[i].getFirstParam() << '\n';
+				std::cout << messages[i].getOriginalMessage() << "\n";
 				Command* command = resource.findCommand(messages[i].getFirstParam());
 				if (command != NULL)
 					command->execute(resource, messages[i]);
@@ -100,10 +100,14 @@ void Server::recieveMessageFromClient(const int& fd) {
 
 void Server::sendMessageToClient(const int& fd) {
 	Client* client = resource.findClient(fd);
-	
-	if (!client->getWriteBuffer().empty()) {
-		send(fd, client->getWriteBuffer().c_str(), client->getWriteBuffer().size(), 0);
+	std::string tmp;
+
+	size_t index = client->getWriteBuffer().find("\r\n");
+	if (index != std::string::npos) {
+		tmp = client->getWriteBuffer().substr(0, index + 2);
 		client->deleteWriteBuffer();
+		send(fd, tmp.c_str(), tmp.size(), 0);
+		std::cout << "send: " << tmp;
 	}
 }
 

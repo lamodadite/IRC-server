@@ -69,7 +69,7 @@ void	Client::deleteReadBuffer() {
 
 void	Client::deleteWriteBuffer() {
 	size_t pos;
-	while ((pos = sendBuffer.find("\n")) != std::string::npos)
+	if ((pos = sendBuffer.find("\r\n")) != std::string::npos)
 		sendBuffer.erase(0, pos + 2);
 }
 
