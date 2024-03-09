@@ -54,7 +54,7 @@ void Join::execute(Resource& resource, Message message) {
 		channel->addClient(client);
 		client->addJoinedChannel(channel);
 		sendMessageToChannel(channel, client->getNickname() 
-				+ " is joining the channel " + channels[i] + '\n');
+				+ " is joining the channel " + channels[i] + '\n', client);
 		if (channel->getTopic().size()) reply.rplTopic(client, channel);
 	}
 }
@@ -71,13 +71,24 @@ void	Join::splitByComma(std::vector<std::string>& target, std::string param) {
 	if (param.size()) target.push_back(param);
 }
 
-void	Join::sendMessageToChannel(Channel* channel, std::string message) {
+void	Join::sendMessageToChannel(Channel* channel, std::string message, Client* client) {
 	const std::set<Client*>& clientList = channel->getClientList();
-
+	(void)message;
 	std::set<Client*>::iterator iter;
+	message = "";
+	client->addWriteBuffer(":" + client->getNickname() + " JOIN " + channel->getName() + "\r\n");
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
-		(*iter)->addWriteBuffer(message);
+		if ((*iter)->getNickname() != client->getNickname()) {
+			(*iter)->addWriteBuffer(":" + client->getNickname() + " JOIN " + channel->getName() + "\r\n");
+			std::cout << ":" + client->getNickname() + " JOIN " + channel->getName() << "\r\n";
+		}
+		message += "@" + (*iter)->getNickname() + " ";
 	}
+	client->addWriteBuffer(":IRC_Server 353 " + client->getNickname() + " @ " + channel->getName() + " :");
+	client->addWriteBuffer(message + "\r\n");
+	client->addWriteBuffer(":IRC_Server 366 " + client->getNickname() + " " + channel->getName() + " :End of /NAMES list\r\n");
+	std::cout << ":IRC_Server 353 " + client->getNickname() + " @ " + channel->getName() + " :" + message << '\n';
+	std::cout << ":IRC_Server 366 " + client->getNickname() + " " + channel->getName() + " :End of /NAMES list\n";
 }
 
 // TODO: 시그널 처리 해야함
