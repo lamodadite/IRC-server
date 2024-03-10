@@ -53,8 +53,7 @@ void Join::execute(Resource& resource, Message message) {
 		}
 		channel->addClient(client);
 		client->addJoinedChannel(channel);
-		sendMessageToChannel(channel, client->getNickname() 
-				+ " is joining the channel " + channels[i] + '\n', client);
+		sendMessageToChannel(channel, client);
 		if (channel->getTopic().size()) reply.rplTopic(client, channel);
 	}
 }
@@ -71,16 +70,15 @@ void	Join::splitByComma(std::vector<std::string>& target, std::string param) {
 	if (param.size()) target.push_back(param);
 }
 
-void	Join::sendMessageToChannel(Channel* channel, std::string message, Client* client) {
+void	Join::sendMessageToChannel(Channel* channel, Client* client) {
 	const std::set<Client*>& clientList = channel->getClientList();
-	(void)message;
+	std::string message;
 	std::set<Client*>::iterator iter;
 	message = "";
-	client->addWriteBuffer(":" + client->getNickname() + " JOIN " + channel->getName() + "\r\n");
+	client->addWriteBuffer(":" + client->getNickname() + "!~sungyoon@127.0.0.1 JOIN " + channel->getName() + "\r\n");
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
 		if ((*iter)->getNickname() != client->getNickname()) {
-			(*iter)->addWriteBuffer(":" + client->getNickname() + " JOIN " + channel->getName() + "\r\n");
-			std::cout << ":" + client->getNickname() + " JOIN " + channel->getName() << "\r\n";
+			(*iter)->addWriteBuffer(":" + client->getNickname() + "!~sungyoon@127.0.0.1 JOIN " + channel->getName() + "\r\n");
 		}
 		message += "@" + (*iter)->getNickname() + " ";
 	}

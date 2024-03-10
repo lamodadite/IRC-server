@@ -18,6 +18,7 @@ class Privmsg : public Command {
 
 	private:
 		void	splitByComma(std::vector<std::string>& target, std::string param);
+		void	SendMessageToChannel(Client* client, Channel* channel, Client* target, const std::string comment);
 		void	SendMessageToClient(Client* client, Client* target, const std::string comment);
 
 };

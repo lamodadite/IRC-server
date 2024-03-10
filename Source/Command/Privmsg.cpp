@@ -52,12 +52,13 @@ void	Privmsg::execute(Resource& resource, Message message) {
 	Client *targetClient;
 	for (size_t i = 0; i < target.size(); i++) {
 		if (target[i][0] == '#' || target[i][0] == '&') {
-			const std::set<Client*>& clientList = resource.findChannel(target[i])->getClientList();
+			Channel *channel = resource.findChannel(target[i]);
+			const std::set<Client*>& clientList = channel->getClientList();
 			std::set<Client*>::iterator it;
 			for (it = clientList.begin(); it != clientList.end(); it++) {
 				if ((*it)->getClientFd() != client->getClientFd()) {
 					targetClient = (*it);
-					SendMessageToClient(client, targetClient, message.getParam()[2]);
+					SendMessageToChannel(client, channel, targetClient, message.getParam()[2]);
 				}
 			}
 		}
@@ -68,11 +69,18 @@ void	Privmsg::execute(Resource& resource, Message message) {
 	}
 }
 
+void	Privmsg::SendMessageToChannel(Client* client, Channel* channel, Client* target, const std::string comment) {
+	std::string message;
+	
+	message = ":" + client->getNickname() + " PRIVMSG ";
+	message += channel->getName() + " :" + comment + "\r\n";
+	target->addWriteBuffer(message);
+}
+
 void	Privmsg::SendMessageToClient(Client* client, Client* target, const std::string comment) {
 	std::string message;
 	
 	message = ":" + client->getNickname() + " PRIVMSG ";
 	message += target->getNickname() + " :" + comment + "\r\n";
-	std::cout << message << '\n';
 	target->addWriteBuffer(message);
 }

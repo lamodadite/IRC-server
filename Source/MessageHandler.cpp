@@ -58,13 +58,10 @@ void	MessageHandler::splitToParam(std::string& splitedBuffer, Message& message) 
 	message.setParam(params);
 	message.setFirstParam(params[0]);
 	if (isCommand(params[0])) message.setIsCommand(true);
-	for (size_t i = 0 ; i < params.size(); i++) {
-		std::cout << params[i] << '\n';
-	}
 }
 
 bool	MessageHandler::isCommand(const std::string& param) {
-	const std::string commands[9] = {
+	const std::string commands[10] = {
 			"NICK",
 			"INVITE",
 			"JOIN",
@@ -74,8 +71,9 @@ bool	MessageHandler::isCommand(const std::string& param) {
 			"TOPIC",
 			"USER",
 			"PRIVMSG"
+			"PING",
 	};
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (param == commands[i]) return true;
 	}
 	return false;

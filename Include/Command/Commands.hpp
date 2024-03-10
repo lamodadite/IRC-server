@@ -10,5 +10,6 @@
 # include "Privmsg.hpp"
 # include "Topic.hpp"
 # include "User.hpp"
+# include "Ping.hpp"
 
 #endif
