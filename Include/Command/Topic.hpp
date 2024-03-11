@@ -10,13 +10,14 @@ class Resource;
 class Topic : public Command {
 	public:
 		Topic();
-		~Topic();
 		Topic(const Topic& rhs);
-		Topic& operator=(const Topic& rhs);
+		Topic&	operator=(const Topic& rhs);
+		~Topic();
 
-		void execute(Resource& resource, Message message);
+		void	execute(Resource& resource, Message message);
+		
 	private:
-		void	sendMessageToChannel(Channel* channel, std::string message);
+		void	sendMessageToChannel(Client* client, Channel* channel);
 };
 
 #endif

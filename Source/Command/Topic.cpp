@@ -23,22 +23,25 @@ void Topic::execute(Resource& resource, Message message) {
 	} else if (channel->hasMode('t') && !channel->hasOperator(client)) {
 		reply.errChanOperIvsNeeded(client, channel);
 		return;
-	}
+	}  
 	if (message.getParam().size() == 2) {
-		channel->setTopic("");
-		reply.rplNoTopic(client, channel);
-	}	else {
+		if (channel->getTopic() == "") {
+			reply.rplNoTopic(client, channel);
+		} else {
+			reply.rplTopic(client, channel);
+			//reply.rplTopicWhoTime(client, channel);
+		}
+	} else {
 		channel->setTopic(message.getParam()[2]);
-		reply.rplTopic(client, channel);
-		//reply.rplTopicWhoTime(client, channel);
 	}
-	sendMessageToChannel(channel, "Topic: " + channel->getTopic() + '\n');
+	sendMessageToChannel(client, channel);
 }
 
-void	Topic::sendMessageToChannel(Channel* channel, std::string message) {
+void	Topic::sendMessageToChannel(Client* client, Channel* channel) {
 	const std::set<Client*>& clientList = channel->getClientList();
-
+	std::string message = ":" + client->getNickname() + " TOPIC " + channel->getName() + " :" + channel->getTopic() + "\r\n";
 	std::set<Client*>::iterator iter;
+
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
 		(*iter)->addWriteBuffer(message);
 	}
