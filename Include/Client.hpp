@@ -16,6 +16,7 @@ class Client {
 		const bool&	getRegistered() const;
 		const bool&	getPassed() const;
 		const std::string&	getReadBuffer() const;
+		const std::string&	getUsername() const;
 		const std::string&	getWriteBuffer() const;
 		const int& getClientFd() const;
 
