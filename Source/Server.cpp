@@ -11,6 +11,7 @@ Server::Server(const int& port, const std::string& password)
 Server::~Server() {std::cout << "Closing Server\n";}
 
 void Server::initServerinfo() {
+	//hello
 	resource.setPassword(password);
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
