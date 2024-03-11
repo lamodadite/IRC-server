@@ -10,9 +10,9 @@ class Resource;
 class Topic : public Command {
 	public:
 		Topic();
+		~Topic();
 		Topic(const Topic& rhs);
 		Topic& operator=(const Topic& rhs);
-		~Topic();
 
 		void execute(Resource& resource, Message message);
 	private:
