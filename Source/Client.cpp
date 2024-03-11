@@ -40,6 +40,8 @@ const bool&	Client::getRegistered() const {return registered;}
 
 const std::string&	Client::getNickname() const {return nickname;}
 
+const std::string&	Client::getUsername() const {return username;}
+
 const int& Client::getClientFd() const {return clientFd;}
 
 void	Client::setNickname(const std::string& nickname) {

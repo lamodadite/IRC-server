@@ -24,10 +24,10 @@ bool Channel::hasOperator(Client* client) const {
 }
 
 void Channel::addClient(Client *client) {clientList.insert(client);}
-void Channel::addOperator(Client *client) {clientList.insert(client);}
+void Channel::addOperator(Client *client) {operatorList.insert(client);}
 
 void Channel::removeClient(Client *client) {clientList.erase(client);}
-void Channel::removeOperator(Client *client) {clientList.erase(client);}
+void Channel::removeOperator(Client *client) {operatorList.erase(client);}
 void Channel::removeInvited(Client *client) {invitedList.erase(client);}
 
 const std::string& Channel::getName() const {return name;}

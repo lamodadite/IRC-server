@@ -31,6 +31,7 @@ void Join::execute(Resource& resource, Message message) {
 			}
 			resource.addChannel(channels[i]);
 			channel = resource.findChannel(channels[i]);
+			channel->addOperator(client);
 			if (i < keys.size()) channel->setKey(keys[i]);
 		} else {
 			if (channel->getKey().size() && i < keys.size() && channel->getKey() != keys[i]) {
@@ -75,12 +76,11 @@ void	Join::sendMessageToChannel(Channel* channel, Client* client) {
 	std::string message;
 	std::set<Client*>::iterator iter;
 	message = "";
-	client->addWriteBuffer(":" + client->getNickname() + "!~sungyoon@127.0.0.1 JOIN " + channel->getName() + "\r\n");
+	
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
-		if ((*iter)->getNickname() != client->getNickname()) {
-			(*iter)->addWriteBuffer(":" + client->getNickname() + "!~sungyoon@127.0.0.1 JOIN " + channel->getName() + "\r\n");
-		}
-		message += "@" + (*iter)->getNickname() + " ";
+		(*iter)->addWriteBuffer(":" + client->getNickname() + "!~" + client->getUsername() + "@127.0.0.1 JOIN " + channel->getName() + "\r\n");
+		if (channel->hasOperator((*iter))) message += '@';
+		message += (*iter)->getNickname() + " ";
 	}
 	client->addWriteBuffer(":IRC_Server 353 " + client->getNickname() + " @ " + channel->getName() + " :");
 	client->addWriteBuffer(message + "\r\n");
