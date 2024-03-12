@@ -93,14 +93,14 @@ void	Reply::errBadChanMask(Client* client) {
 void	Reply::rplTopic(Client* client, Channel* channel) {
 	std::string	buffer;
 
-	buffer += ":IRC_Server 332 " + client->getNickname() + ' ' + channel->getName() + " :" + channel->getTopic() + "r\n";
+	buffer += ":IRC_Server 332 " + client->getNickname() + ' ' + channel->getName() + " :" + channel->getTopic() + "\r\n";
 	client->addWriteBuffer(buffer);
 }
 
 // void	Reply::rplTopicWhoTime(Client* client, Channel* channel) {
 // 	std::string	buffer;
 
-// 	buffer += ":IRC_Server 333 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getTopicAuthor() + ' ' + channel->getTopicSetTime() + '\r\n';
+// 	buffer += ":IRC_Server 333 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getTopicAuthor() + ' ' + channel->getTopicSetTime() + "\r\n";
 // 	client->addWriteBuffer(buffer);
 // }
 
@@ -151,7 +151,7 @@ void	Reply::errUserNotInChannel(Client* client, std::string nick, Channel* chann
 // void	Reply::rplCreationTime(Client* client, Channel* channel) {
 // 	std::string	buffer;
 
-// 	buffer += ":IRC_Server 329 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getCreationTime() + '\r\n';
+// 	buffer += ":IRC_Server 329 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getCreationTime() + "\r\n";
 // 	client->addWriteBuffer(buffer);
 // }
 
