@@ -37,12 +37,11 @@ void Kick::execute(Resource& resource, Message message) {
 		return;
 	} 	
 	splitByComma(target, message.getParam()[2]);
-	for (int i = 0; i < target.size(); i++)
+	for (size_t i = 0; i < target.size(); i++)
 	{
 		kickedClient = resource.findClient(target[i]);
-		if (kickedClient == NULL) {
-			reply.errUserNotInChannel(client, message.getParam()[2], channel);
-			kickedClient = resource.findClient(message.getParam()[2]);
+		if (kickedClient == NULL || !channel->hasClient(kickedClient)) {
+			reply.errUserNotInChannel(client, target[i], channel);
 			continue;
 		} else if (!channel->hasClient(client)) {
 			reply.errNotOnChannel(client, channel);
@@ -63,7 +62,7 @@ void	Kick::sendMessageToChannel(Client *client, Channel* channel, Client *kicked
 	std::string message;
 
 	message = ":" + client->getNickname() + " KICK ";
-	message += channel->getName() + " " + kickedClient->getNickname() + " :" + reason;
+	message += channel->getName() + " " + kickedClient->getNickname() + " :" + reason + "\r\n";
 
 	std::set<Client*>::iterator iter;
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {

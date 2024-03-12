@@ -26,9 +26,21 @@ bool Channel::hasOperator(Client* client) const {
 void Channel::addClient(Client *client) {clientList.insert(client);}
 void Channel::addOperator(Client *client) {operatorList.insert(client);}
 
-void Channel::removeClient(Client *client) {clientList.erase(client);}
-void Channel::removeOperator(Client *client) {operatorList.erase(client);}
-void Channel::removeInvited(Client *client) {invitedList.erase(client);}
+void Channel::removeClient(Client *client) {
+	std::set<Client*>::iterator it = clientList.find(client);
+	if (it != clientList.end())
+		clientList.erase(it);
+}
+void Channel::removeOperator(Client *client) {
+	std::set<Client*>::iterator it = operatorList.find(client);
+	if (it != operatorList.find(client))
+		operatorList.erase(it);
+}
+void Channel::removeInvited(Client *client) {
+	std::set<Client*>::iterator it = invitedList.find(client);
+	if (it != invitedList.find(client))
+		invitedList.erase(it);
+}
 
 const std::string& Channel::getName() const {return name;}
 const std::string& Channel::getTopic() const {return topic;}
@@ -44,8 +56,9 @@ void Channel::addMode(const char mode) {
 		this->mode += mode;
 }
 void Channel::removeMode(const char mode) {
-	if (this->mode.find(mode) != std::string::npos)
-		this->mode.erase(this->mode.find(mode));
+	size_t pos = this->mode.find(mode);
+	if (pos != std::string::npos)
+		this->mode.erase(pos, 1);
 }
 
 void	Channel::setKey(const std::string& key) {this->key = key;}
