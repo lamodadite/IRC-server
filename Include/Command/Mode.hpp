@@ -18,12 +18,15 @@ class Mode : public Command {
 
 	private:
 		void	parseModeString(Channel& channel, Message &message);
+		void	sendMessageToChannel(Channel* channel, std::string& replyMessage);
 
-		void	changeModeI(Channel* channel, int flag);
-		void	changeModeT(Channel* channel, int flag);
-		void	changeModeK(Channel* channel, int flag, int& index, Message message);
-		void	changeModeO(Channel* channel, Resource& resource, int flag, int& index, Message message);
-		void	changeModeL(Channel* channel, int flag, int& index, Message message);
+		int		changeModeL(Channel* channel, bool flag, int& index, Message message);
+		bool	changeModeI(Channel* channel, bool flag);
+		bool	changeModeT(Channel* channel, bool flag);
+		bool	changeModeK(Channel* channel, bool flag, int& index, Message message);
+		bool	changeModeO(Channel* channel, Resource& resource, bool flag, int& index, Message message);
+
+		std::string	deleteFailedMode(std::string& modestring);
 };
 
 #endif
