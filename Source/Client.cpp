@@ -23,7 +23,10 @@ Client::~Client() {}
 const std::string&	Client::getReadBuffer() const {return readBuffer;}
 const std::string&	Client::getWriteBuffer() const {return sendBuffer;}
 
-void	Client::addReadBuffer(const std::string& str) {readBuffer += str;}
+void	Client::addReadBuffer(const std::string& str) {
+	readBuffer += str;
+	if (readBuffer.size() >= 512) readBuffer.clear();
+}
 void	Client::addWriteBuffer(const std::string& str) {sendBuffer += str;}
 
 void	Client::addJoinedChannel(Channel* channel) {joinedChannel.insert(channel);}
