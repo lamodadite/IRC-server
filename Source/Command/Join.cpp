@@ -19,8 +19,6 @@ void Join::execute(Resource& resource, Message message) {
 	splitByComma(channels, message.getParam()[1]);
 	if (message.getParam().size() >= 3)
 		splitByComma(keys, message.getParam()[2]);
-	// client가 들어갈 수 있는 채널수 제한이 있을 경우 제한에 관한 처리
-	
 	for (size_t i = 0; i < channels.size(); i++) {
 		Channel* channel = resource.findChannel(channels[i]);
 		if (channel == 0) {
@@ -38,9 +36,9 @@ void Join::execute(Resource& resource, Message message) {
 				reply.errBadChannelKey(client, channel);
 				continue;
 			}
-			if (channel->getClientList().size() == channel->getUserLimit()) {
+			if (channel->hasMode('l') && channel->getUserLimit() <= channel->getClientList().size()) {
 				reply.errChannelIsFull(client, channel);
-				continue;				
+				continue;
 			}
 			if (channel->hasMode('i') && !channel->checkInvited(client)) {
 				reply.errInviteOnlyChan(client, channel);
