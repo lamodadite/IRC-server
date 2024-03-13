@@ -78,7 +78,7 @@ void	Mode::execute(Resource& resource, Message message) {
 		}
 	}
 	std::string replyMessage;
-	replyMessage += ":" + client->getNickname() + "!~" + client->getUsername() + "@127.0.0.1";
+	replyMessage += ":" + client->getNickname() + "!~" + client->getUsername() + "@" + client->getIp();
 	for (size_t i = 0; i < message.getParam().size(); i++) {
 		if (i == 2) replyMessage += ' ' + deleteFailedMode(modestring);
 		else if (notValidArgument.find(i) != notValidArgument.end()) continue;
