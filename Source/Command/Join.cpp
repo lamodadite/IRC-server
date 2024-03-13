@@ -22,8 +22,7 @@ void Join::execute(Resource& resource, Message message) {
 	for (size_t i = 0; i < channels.size(); i++) {
 		Channel* channel = resource.findChannel(channels[i]);
 		if (channel == 0) {
-			if ((channels[i][0] != '#' && channels[i][0] != '&')) {
-			//if ((channels[i][0] != '#' && channels[i][0] != '&') || hasControlG(channels[i])) {
+			if ((channels[i][0] != '#' && channels[i][0] != '&') || hasControlG(channels[i])) {
 				reply.errBadChanMask(client);
 				continue;
 			}
@@ -44,8 +43,7 @@ void Join::execute(Resource& resource, Message message) {
 				reply.errInviteOnlyChan(client, channel);
 				continue;
 			}
-			if ((channels[i][0] != '#' && channels[i][0] != '&')) {
-			//if ((channels[i][0] != '#' && channels[i][0] != '&') || hasControlG(channels[i])) {
+			if ((channels[i][0] != '#' && channels[i][0] != '&') || hasControlG(channels[i])) {
 				reply.errBadChanMask(client);
 				continue;
 			}
@@ -90,9 +88,8 @@ void	Join::sendMessageToChannel(Channel* channel, Client* client) {
 	std::cout << ":IRC_Server 366 " + client->getNickname() + " " + channel->getName() + " :End of /NAMES list\n";
 }
 
-// TODO: 시그널 처리 해야함
-// bool	Join::hasControlG(std::string param) {
-// 	for (size_t i = 0; i < param.size(); i++)
-// 		if (param[i] == '^G') return true;
-// 	return false;
-// }
+ bool	Join::hasControlG(std::string param) {
+ 	for (size_t i = 0; i < param.size(); i++)
+ 		if (param[i] == 7) return true;
+ 	return false;
+ }
