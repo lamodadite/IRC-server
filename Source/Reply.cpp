@@ -135,7 +135,7 @@ void	Reply::rplInviting(Client* client, std::string nick, Channel* channel) {
 void	Reply::errUserOnChannel(Client* client, std::string nick, Channel* channel) {
 	std::string	buffer;
 
-	buffer += ":IRC_Server 443 " + client->getNickname() + ' ' + nick + ' ' + channel->getName() + " :is already on channel\r\n";
+	buffer += ":IRC_Server 443 " + client->getNickname() + ' ' + nick + ' ' + channel->getName() + " :Is already on channel\r\n";
 	client->addWriteBuffer(buffer);
 }
 
