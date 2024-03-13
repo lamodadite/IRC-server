@@ -83,3 +83,10 @@ bool	Channel::checkInvited(Client* client) const {
 	if (invitedList.find(client) != invitedList.end()) return true;
 	return false;
 }
+
+void	Channel::clearInvitedList() {
+	std::set<Client *>::iterator it;
+	for (it = invitedList.begin(); it != invitedList.end(); it++) {
+		(*it)->deleteInvitedChannel(this);
+	}
+}

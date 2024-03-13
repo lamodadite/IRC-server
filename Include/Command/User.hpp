@@ -16,7 +16,6 @@ class User : public Command {
 		void	execute(Resource& resource, Message message);
 
 	private:
-		void	fillWithWelcomeMessage(Client* client);
 };
 
 #endif

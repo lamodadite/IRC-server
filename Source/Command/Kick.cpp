@@ -54,6 +54,7 @@ void Kick::execute(Resource& resource, Message message) {
 			sendMessageToChannel(client, channel, kickedClient, message.getParam()[3]);
 		channel->removeClient(kickedClient);
 		channel->removeOperator(kickedClient);
+		kickedClient->deleteJoinedChannel(channel);
 	}
 }
 

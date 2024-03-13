@@ -34,6 +34,7 @@ void Nick::execute(Resource& resource, Message message) {
 		reply.errNoNicknameGiven(client);
 		return ;
 	} else if (resource.findClient(message.getParam()[1]) != NULL) {
+		client->setNickname(message.getParam()[1], false);
 		reply.errNicknameInUse(client);
 		return ;
 	} else if (!isValidNickname(message.getParam()[1])) {
@@ -44,6 +45,9 @@ void Nick::execute(Resource& resource, Message message) {
 	client->setNickname(message.getParam()[1]);
 	if (client->getRegistered()) {
 		SendMessageToClient(client);
+	}
+	else if (client->canBeRegistered()) {
+		reply.rplWelcomeMessage(client);
 	}
 }
 

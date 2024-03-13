@@ -18,7 +18,15 @@ Client::Client(const int& clientFd)
 			oldNickname(""), registered(false),	passed(false),
 			nicknameOn(false), usernameOn(false) {}
 
-Client::~Client() {}
+Client::~Client() {
+	std::set<Channel *>::iterator it;
+	for (it = joinedChannel.begin(); it != joinedChannel.end(); it++) {
+		(*it)->removeClient(this);
+		(*it)->removeOperator(this);
+	}
+	for (it = invitedChannel.begin(); it != invitedChannel.end(); it++)
+		(*it)->removeInvited(this);
+}
 
 const std::string&	Client::getReadBuffer() const {return readBuffer;}
 const std::string&	Client::getWriteBuffer() const {return sendBuffer;}
@@ -40,9 +48,10 @@ const int& Client::getClientFd() const {return clientFd;}
 
 void	Client::setPassed(const bool& passed) {this->passed = passed;}
 
-void	Client::setNickname(const std::string& nickname) {
+void	Client::setNickname(const std::string& nickname, bool nicknameOn) {
 	this->nickname = nickname;
-	nicknameOn = true;
+	if (nicknameOn)
+		this->nicknameOn = true;
 }
 
 void	Client::setOldNickname(const std::string& oldNickname) {this->oldNickname = oldNickname;}
@@ -77,6 +86,12 @@ void	Client::deleteJoinedChannel(Channel* channel) {
 	std::set<Channel*>::iterator it = joinedChannel.find(channel);
 	if (it != joinedChannel.end())
 		joinedChannel.erase(it);
+}
+
+void	Client::deleteInvitedChannel(Channel* channel) {
+	std::set<Channel*>::iterator it = invitedChannel.find(channel);
+	if (it != invitedChannel.end())
+		invitedChannel.erase(it);
 }
 
 bool	Client::canBeRegistered() {

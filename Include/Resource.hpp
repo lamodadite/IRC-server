@@ -29,7 +29,7 @@ class Resource {
 
 		const std::string& getPassword() const;
 
-		void	removeClientFromChannel(Client* client);
+		void	removeEmptyChannel();
 
 	private:
 		Resource(const Resource& rhs);

@@ -82,12 +82,13 @@ int		Resource::getClientCount() {return clientMap.size();}
 
 const std::string& Resource::getPassword() const {return password;}
 
-void	Resource::removeClientFromChannel(Client* client) {
-	for (std::map<std::string, Channel>::iterator it = channelMap.begin(); it != channelMap.end(); it++)
-	{
-		it->second.removeClient(client);
-		it->second.removeOperator(client);
+void	Resource::setPassword(const std::string& password) {this->password = password;}
+
+void	Resource::removeEmptyChannel() {
+	std::map<std::string, Channel>::iterator it;
+	for (it = channelMap.begin(); it != channelMap.end(); it++) {
+		if (it->second.getClientList().size() == 0)
+			it->second.clearInvitedList();
+		channelMap.erase(it);
 	}
 }
-
-void	Resource::setPassword(const std::string& password) {this->password = password;}
