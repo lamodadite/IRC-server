@@ -21,8 +21,8 @@ void	Mode::execute(Resource& resource, Message message) {
 		return;
 	}
 	if (message.getParam().size() < 3) {
-		// reply.rplChannelModeIs(client, channel);
-		// reply.rplCreationTime(client, channel);
+		reply.rplChannelModeIs(client, channel);
+		reply.rplCreationTime(client, channel);
 		return;
 	}
 	if (!channel->hasOperator(client)) {
