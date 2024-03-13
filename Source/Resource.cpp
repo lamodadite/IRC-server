@@ -11,7 +11,6 @@ Resource::Resource() {
 	commandMap.insert(std::make_pair("USER", new User()));
 	commandMap.insert(std::make_pair("PRIVMSG", new Privmsg()));
 	commandMap.insert(std::make_pair("PING", new Ping()));
-	commandMap.insert(std::make_pair("BOT", new Bot()));
 }
 
 Resource::~Resource() {

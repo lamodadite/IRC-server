@@ -72,7 +72,6 @@ bool	MessageHandler::isCommand(const std::string& param) {
 			"USER",
 			"PRIVMSG"
 			"PING",
-			"BOT",
 	};
 	for (int i = 0; i < 10; i++) {
 		if (param == commands[i]) return true;

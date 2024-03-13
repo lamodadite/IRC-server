@@ -22,8 +22,12 @@ class Bot : public Command {
 		void execute(Resource& resource, Message message);
 
 	private:
-		int	checkArgument(Message message);
+		int	checkArgument(Message& message);
 		void	whatsArgument(Client* client);
+		void	selectFood(Client* client, const std::string& when);
+		void	selectDrink(Client* client);
+		void	rollDice(Client* client);
+		void	selectTimeToGoHome(Client* client);
 };
 
 #endif
