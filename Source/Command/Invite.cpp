@@ -24,10 +24,22 @@ void Invite::execute(Resource& resource, Message message) {
 	} else if (!channel->hasOperator(client)) {
 		reply.errChanOperIvsNeeded(client, channel);
 		return;
-	} else if (!channel->hasClient(invitedClient)) {
-		reply.errUserOnChannel(client, message.getParam()[1], channel);
+	} else if (channel->hasClient(invitedClient)) {
+		std::cout << "already exist" << std::endl;
+		reply.errUserOnChannel(client, invitedClient->getNickname(), channel);
 		return;
 	}
 	// : <nickname> INVITE <invitedNickname>
 	channel->inviteClient(invitedClient);
+	reply.rplInviting(invitedClient, invitedClient->getNickname(), channel);
+	sendMessageToChannel(client, invitedClient, channel);
+}
+
+void Invite::sendMessageToChannel(Client* client, Client* invitedClient, Channel* channel) {
+	std::string message;
+
+	//:qwe!~jooh@121.135.181.42 INVITE sungyoon2 :#zxc
+	message = client->getClientInfo() + " INVITE " + invitedClient->getNickname();
+	message += " :#" + channel->getName();
+	invitedClient->addWriteBuffer(message);
 }
