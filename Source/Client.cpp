@@ -73,7 +73,11 @@ void	Client::deleteWriteBuffer() {
 		sendBuffer.erase(0, pos + 2);
 }
 
-void	Client::deleteJoinedChannel(Channel* channel) {joinedChannel.erase(channel);}
+void	Client::deleteJoinedChannel(Channel* channel) {
+	std::set<Channel*>::iterator it = joinedChannel.find(channel);
+	if (it != joinedChannel.end())
+		joinedChannel.erase(it);
+}
 
 bool	Client::canBeRegistered() {
 	if (nicknameOn && usernameOn && passed) {
