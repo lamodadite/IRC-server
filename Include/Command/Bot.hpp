@@ -5,6 +5,11 @@
 # include "Command.hpp"
 # include "Resource.hpp"
 
+# define FOOD 1
+# define DRINK 2
+# define DICE 3
+# define HOME 4
+
 class Resource;
 
 class Bot : public Command {
