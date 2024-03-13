@@ -85,6 +85,7 @@ void	Mode::execute(Resource& resource, Message message) {
 		else replyMessage += ' ' + message.getParam()[i];
 	}
 	replyMessage += "\r\n";
+	std::cout << replyMessage;
 	sendMessageToChannel(channel, replyMessage);
 }
 
@@ -99,10 +100,12 @@ std::string	Mode::deleteFailedMode(std::string& modestring) {
 		else {
 			if (flag == 0) tmp += modestring[i];
 			else if (flag == -1) {
-				tmp += '-' + modestring[i];
+				tmp += '-'; 
+				tmp += modestring[i];
 				flag = 0;
 			} else if (flag == 1) {
-				tmp += '+' + modestring[i];
+				tmp += '+';
+				tmp += modestring[i];
 				flag = 0;
 			}
 		}
