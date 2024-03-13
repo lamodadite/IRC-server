@@ -69,7 +69,7 @@ void	Join::splitByComma(std::vector<std::string>& target, std::string param) {
 	while ((index = param.find(',')) != std::string::npos) {
 		tmp = param.substr(0, index);
 		target.push_back(tmp);
-		param.erase(0, index + 2);
+		param.erase(0, index + 1);
 	}
 	if (param.size()) target.push_back(param);
 }
