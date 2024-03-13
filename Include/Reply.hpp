@@ -35,7 +35,7 @@ class Reply	{
 		void	rplInviting(Client* client, std::string nick, Channel* channel);
 		void	errUserOnChannel(Client* client, std::string nick, Channel* channel);
 		void	errUserNotInChannel(Client* client, std::string nick, Channel* channel);
-		// void	rplChannelModeIs(Client* client, Channel* channel);
+		void	rplChannelModeIs(Client* client, Channel* channel);
 		void	rplCreationTime(Client* client, Channel* channel);
 		void	errNoSuchNick(Client* client, std::string nickname);
 		void	errCannotSendToChan(Client* client, Channel* channel);

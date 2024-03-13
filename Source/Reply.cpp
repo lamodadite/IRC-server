@@ -146,7 +146,20 @@ void	Reply::errUserNotInChannel(Client* client, std::string nick, Channel* chann
 	client->addWriteBuffer(buffer);
 }
 
-// void	Reply::rplChannelModeIs(Client* client, Channel* channel) {}
+void	Reply::rplChannelModeIs(Client* client, Channel* channel) {
+	std::string mode = channel->getMode();
+	std::string	buffer;
+
+	std::sort(mode.begin(), mode.end());
+	size_t modesize = mode.size();
+	for (size_t i = 0; i < modesize; i++) {
+		if (mode[i] == 'k') mode += ' ' + channel->getKey();
+		else if (mode[i] == 'l') mode += ' ' + channel->getUserLimit();
+	}
+
+	buffer += ":IRC_Server 324 " + client->getNickname() + ' ' + channel->getName() + ' ' + mode + "\r\n";
+	client->addWriteBuffer(buffer);
+}
 
 void	Reply::rplCreationTime(Client* client, Channel* channel) {
 	std::string	buffer;
