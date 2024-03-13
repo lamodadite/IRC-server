@@ -97,12 +97,12 @@ void	Reply::rplTopic(Client* client, Channel* channel) {
 	client->addWriteBuffer(buffer);
 }
 
-// void	Reply::rplTopicWhoTime(Client* client, Channel* channel) {
-// 	std::string	buffer;
+void	Reply::rplTopicWhoTime(Client* client, Channel* channel) {
+	std::string	buffer;
 
-// 	buffer += ":IRC_Server 333 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getTopicAuthor() + ' ' + channel->getTopicSetTime() + "\r\n";
-// 	client->addWriteBuffer(buffer);
-// }
+	buffer += ":IRC_Server 333 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getTopicAuthor() + ' ' + channel->getTopicSetTime() + "\r\n";
+	client->addWriteBuffer(buffer);
+}
 
 void	Reply::errNotOnChannel(Client* client, Channel* channel) {
 	std::string	buffer;
@@ -148,12 +148,12 @@ void	Reply::errUserNotInChannel(Client* client, std::string nick, Channel* chann
 
 // void	Reply::rplChannelModeIs(Client* client, Channel* channel) {}
 
-// void	Reply::rplCreationTime(Client* client, Channel* channel) {
-// 	std::string	buffer;
+void	Reply::rplCreationTime(Client* client, Channel* channel) {
+	std::string	buffer;
 
-// 	buffer += ":IRC_Server 329 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getCreationTime() + "\r\n";
-// 	client->addWriteBuffer(buffer);
-// }
+	buffer += ":IRC_Server 329 " + client->getNickname() + ' ' + channel->getName() + ' ' + channel->getCreationTime() + "\r\n";
+	client->addWriteBuffer(buffer);
+}
 
 void	Reply::errNoSuchNick(Client* client, std::string nickname) {
 	std::string	buffer;
@@ -180,5 +180,12 @@ void	Reply::errNoTextToSend(Client* client) {
 	std::string	buffer;
 
 	buffer += ":IRC_Server 412 " + client->getNickname() + " :No text to send\r\n";
+	client->addWriteBuffer(buffer);
+}
+
+void	Reply::errUnknownCommand(Client* client, const std::string& message) {
+	std::string buffer;
+
+	buffer += ":IRC_Server 421 " + client->getNickname() + " " + message + " :Unknown command\r\n";
 	client->addWriteBuffer(buffer);
 }

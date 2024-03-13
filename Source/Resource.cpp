@@ -59,6 +59,9 @@ void	Resource::addClient(const int& fd) {
 
 void	Resource::addChannel(const std::string& name) {
 	Channel newChannel(name);
+	std::stringstream ss;
+	ss << time(NULL);
+	newChannel.setCreationTime(ss.str());
 
 	channelMap.insert(std::make_pair(name, newChannel));
 }

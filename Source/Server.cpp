@@ -92,6 +92,12 @@ void Server::recieveMessageFromClient(const int& fd) {
 				std::cout << messages[i].getOriginalMessage() << '\n';
 				if (command != NULL)
 					command->execute(resource, messages[i]);
+				else {
+					if (client->getRegistered()) {
+						Reply reply;
+						reply.errUnknownCommand(client, messages[i].getFirstParam());
+					}
+				}
 			}
 			client->deleteReadBuffer();
 		}

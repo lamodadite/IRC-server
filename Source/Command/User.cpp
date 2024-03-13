@@ -16,6 +16,7 @@ void User::execute(Resource& resource, Message message) {
 		return ;
 	}
 	client->setUsername(message.getParam()[1]);
+	client->setIp(message.getParam()[3]);
 	if (client->canBeRegistered()) {
 		fillWithWelcomeMessage(client);
 	}
