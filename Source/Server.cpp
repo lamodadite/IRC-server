@@ -121,8 +121,8 @@ void Server::disconnectClient(const int& fd) {
 	EV_SET(&changeList[0], fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
 	EV_SET(&changeList[1], fd, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
 	kevent(kqFd, changeList, 2, NULL, 0, NULL);
-	resource.removeClientFromChannel(resource.findClient(fd));
 	resource.removeClient(fd);
+	resource.removeEmptyChannel();
 }
 
 void Server::acceptNewClient() {

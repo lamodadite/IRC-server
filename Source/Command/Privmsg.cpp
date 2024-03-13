@@ -72,7 +72,7 @@ void	Privmsg::execute(Resource& resource, Message message) {
 void	Privmsg::SendMessageToChannel(Client* client, Channel* channel, Client* target, const std::string comment) {
 	std::string message;
 	
-	message = ":" + client->getNickname() + " PRIVMSG ";
+	message = ":" + client->getClientInfo() + " PRIVMSG ";
 	message += channel->getName() + " :" + comment + "\r\n";
 	target->addWriteBuffer(message);
 }
@@ -80,7 +80,7 @@ void	Privmsg::SendMessageToChannel(Client* client, Channel* channel, Client* tar
 void	Privmsg::SendMessageToClient(Client* client, Client* target, const std::string comment) {
 	std::string message;
 	
-	message = ":" + client->getNickname() + " PRIVMSG ";
+	message = ":" + client->getClientInfo() + " PRIVMSG ";
 	message += target->getNickname() + " :" + comment + "\r\n";
 	target->addWriteBuffer(message);
 }

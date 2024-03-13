@@ -81,7 +81,7 @@ void	Join::sendMessageToChannel(Channel* channel, Client* client) {
 	message = "";
 	
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
-		(*iter)->addWriteBuffer(":" + client->getNickname() + "!~" + client->getUsername() + "@" + client->getIp() + " JOIN " + channel->getName() + "\r\n");
+		(*iter)->addWriteBuffer(":" + client->getClientInfo() + " JOIN " + channel->getName() + "\r\n");
 		if (channel->hasOperator((*iter))) message += '@';
 		message += (*iter)->getNickname() + " ";
 	}

@@ -202,3 +202,10 @@ void	Reply::errUnknownCommand(Client* client, const std::string& message) {
 	buffer += ":IRC_Server 421 " + client->getNickname() + " " + message + " :Unknown command\r\n";
 	client->addWriteBuffer(buffer);
 }
+
+void	Reply::rplWelcomeMessage(Client* client) {
+	std::string message;
+
+	message = ":IRC_Server 001 " + client->getNickname() + " :Welcome to the IRC Server.\r\n";
+	client->addWriteBuffer(message);
+}

@@ -46,6 +46,8 @@ class Channel {
 		bool	hasMode(const char mode) const;
 		bool	checkInvited(Client* client) const;
 
+		void	clearInvitedList();
+
 	private:
 		Channel();
 		Channel&	operator=(const Channel& rhs);
