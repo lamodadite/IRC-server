@@ -55,7 +55,10 @@ void Join::execute(Resource& resource, Message message) {
 		channel->addClient(client);
 		client->addJoinedChannel(channel);
 		sendMessageToChannel(channel, client);
-		if (channel->getTopic().size()) reply.rplTopic(client, channel);
+		if (channel->getTopic().size()) {
+			reply.rplTopic(client, channel);
+			reply.rplTopicWhoTime(client, channel);
+		}
 	}
 }
 
@@ -78,7 +81,7 @@ void	Join::sendMessageToChannel(Channel* channel, Client* client) {
 	message = "";
 	
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {
-		(*iter)->addWriteBuffer(":" + client->getNickname() + "!~" + client->getUsername() + "@127.0.0.1 JOIN " + channel->getName() + "\r\n");
+		(*iter)->addWriteBuffer(":" + client->getNickname() + "!~" + client->getUsername() + "@" + client->getIp() + " JOIN " + channel->getName() + "\r\n");
 		if (channel->hasOperator((*iter))) message += '@';
 		message += (*iter)->getNickname() + " ";
 	}

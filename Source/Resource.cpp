@@ -59,13 +59,24 @@ void	Resource::addClient(const int& fd) {
 
 void	Resource::addChannel(const std::string& name) {
 	Channel newChannel(name);
+	std::stringstream ss;
+	ss << time(NULL);
+	newChannel.setCreationTime(ss.str());
 
 	channelMap.insert(std::make_pair(name, newChannel));
 }
 
-void	Resource::removeClient(const int& fd) {clientMap.erase(fd);}
+void	Resource::removeClient(const int& fd) {
+	std::map<int, Client>::iterator it = clientMap.find(fd);
+	if (it != clientMap.end())
+		clientMap.erase(it);
+}
 
-void	Resource::removeChannel(const std::string& name) {channelMap.erase(name);}
+void	Resource::removeChannel(const std::string& name) {
+	std::map<std::string, Channel>::iterator it = channelMap.find(name);
+	if (it != channelMap.end())
+		channelMap.erase(it);
+}
 
 int		Resource::getClientCount() {return clientMap.size();}
 
