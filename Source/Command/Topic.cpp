@@ -34,7 +34,7 @@ void Topic::execute(Resource& resource, Message message) {
 		return;
 	} else {
 		channel->setTopic(message.getParam()[2]);
-		channel->setTopicAuthor(client->getNickname() + "!~" + client->getUsername() + "@" + client->getIp());
+		channel->setTopicAuthor(client->getClientInfo());
 		std::stringstream ss;
 		ss << time(NULL);
 		channel->setTopicSetTime(ss.str());
@@ -44,7 +44,7 @@ void Topic::execute(Resource& resource, Message message) {
 
 void	Topic::sendMessageToChannel(Client* client, Channel* channel) {
 	const std::set<Client*>& clientList = channel->getClientList();
-	std::string message = ":" + client->getNickname() + " TOPIC " + channel->getName() + " :" + channel->getTopic() + "\r\n";
+	std::string message = ":" + client->getClientInfo() + " TOPIC " + channel->getName() + " :" + channel->getTopic() + "\r\n";
 	std::set<Client*>::iterator iter;
 
 	for (iter = clientList.begin(); iter != clientList.end(); iter++) {

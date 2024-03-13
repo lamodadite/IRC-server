@@ -62,7 +62,7 @@ void	Kick::sendMessageToChannel(Client *client, Channel* channel, Client *kicked
 	const std::set<Client*>& clientList = channel->getClientList();
 	std::string message;
 
-	message = ":" + client->getNickname() + " KICK ";
+	message = ":" + client->getClientInfo() + " KICK ";
 	message += channel->getName() + " " + kickedClient->getNickname() + " :" + reason + "\r\n";
 
 	std::set<Client*>::iterator iter;

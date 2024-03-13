@@ -62,6 +62,7 @@ void	Resource::addChannel(const std::string& name) {
 	std::stringstream ss;
 	ss << time(NULL);
 	newChannel.setCreationTime(ss.str());
+	std::cout << ss.str() << '\n';
 
 	channelMap.insert(std::make_pair(name, newChannel));
 }
@@ -86,9 +87,15 @@ void	Resource::setPassword(const std::string& password) {this->password = passwo
 
 void	Resource::removeEmptyChannel() {
 	std::map<std::string, Channel>::iterator it;
+	std::vector<std::map<std::string, Channel>::iterator> emptyChannel;
+
 	for (it = channelMap.begin(); it != channelMap.end(); it++) {
 		if (it->second.getClientList().size() == 0)
+		{
 			it->second.clearInvitedList();
-		channelMap.erase(it);
+			emptyChannel.push_back(it);
+		}
 	}
+	for (size_t i = 0; i < emptyChannel.size(); i++)
+		channelMap.erase(emptyChannel[i]);
 }

@@ -7,7 +7,9 @@ Channel::Channel(const std::string& name): name(name), userLimit(9) {}
 Channel::Channel(const Channel& rhs)
 			:clientList(rhs.clientList), operatorList(rhs.operatorList),
 			invitedList(rhs.invitedList), key(rhs.key), name(rhs.name),
-			topic(rhs.topic), mode(rhs.mode), userLimit(rhs.userLimit) {}
+			topic(rhs.topic), mode(rhs.mode), userLimit(rhs.userLimit),
+			creationTime(rhs.creationTime), topicAuthor(rhs.topicAuthor),
+			topicSetTime(rhs.topicSetTime) {}
 
 Channel& Channel::operator=(const Channel& rhs) {(void)rhs; return *this;}
 
@@ -33,12 +35,12 @@ void Channel::removeClient(Client *client) {
 }
 void Channel::removeOperator(Client *client) {
 	std::set<Client*>::iterator it = operatorList.find(client);
-	if (it != operatorList.find(client))
+	if (it != operatorList.end())
 		operatorList.erase(it);
 }
 void Channel::removeInvited(Client *client) {
 	std::set<Client*>::iterator it = invitedList.find(client);
-	if (it != invitedList.find(client))
+	if (it != invitedList.end())
 		invitedList.erase(it);
 }
 

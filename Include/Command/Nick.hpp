@@ -11,10 +11,10 @@ class Nick : public Command {
 	public:
 		Nick();
 		Nick(const Nick& rhs);
-		Nick& operator=(const Nick& rhs);
+		Nick&	operator=(const Nick& rhs);
 		~Nick();
 
-		void execute(Resource& resource, Message message);
+		void	execute(Resource& resource, Message message);
 
 	private:
 		bool	isValidNickname(const std::string& nickname) const;

@@ -105,3 +105,7 @@ bool	Client::canBeRegistered() {
 	return false;
 }
 
+const std::string Client::getClientInfo(bool isOld) const {
+	const std::string clientInfo = isOld ? oldNickname : nickname + "!~" + username + "@" + ip;
+	return clientInfo;
+}

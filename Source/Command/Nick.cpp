@@ -54,7 +54,7 @@ void Nick::execute(Resource& resource, Message message) {
 void	Nick::SendMessageToClient(Client* client) {
 	std::string message;
 	
-	message = ":" + client->getOldNickname();
+	message = ":" + client->getClientInfo(true);
 	message += " NICK " + client->getNickname() + "\r\n";
 	client->addWriteBuffer(message);
 }

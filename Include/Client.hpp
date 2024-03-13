@@ -39,6 +39,8 @@ class Client {
 		bool	hasCompleteMessage();
 		bool	canBeRegistered();
 
+		const std::string getClientInfo(bool isOld=false) const;
+
 	private:
 		Client();
 		Client& operator=(const Client& rhs);
