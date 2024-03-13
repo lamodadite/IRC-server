@@ -12,7 +12,6 @@ void Pass::execute(Resource& resource, Message message) {
 		reply.errNeedMoreParams(client, "PASS");
 		return ;
 	} else if (client->getRegistered()) {
-
 		reply.errAlreadyRegistered(client);
 		return ;
 	} else if (message.getParam()[1] != resource.getPassword()) {

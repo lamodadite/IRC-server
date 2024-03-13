@@ -34,6 +34,7 @@ void Nick::execute(Resource& resource, Message message) {
 		reply.errNoNicknameGiven(client);
 		return ;
 	} else if (resource.findClient(message.getParam()[1]) != NULL) {
+		client->setNickname(message.getParam()[1], false);
 		reply.errNicknameInUse(client);
 		return ;
 	} else if (!isValidNickname(message.getParam()[1])) {
@@ -45,12 +46,15 @@ void Nick::execute(Resource& resource, Message message) {
 	if (client->getRegistered()) {
 		SendMessageToClient(client);
 	}
+	else if (client->canBeRegistered()) {
+		reply.rplWelcomeMessage(client);
+	}
 }
 
 void	Nick::SendMessageToClient(Client* client) {
 	std::string message;
 	
-	message = ":" + client->getOldNickname();
+	message = ":" + client->getClientInfo(true);
 	message += " NICK " + client->getNickname() + "\r\n";
 	client->addWriteBuffer(message);
 }

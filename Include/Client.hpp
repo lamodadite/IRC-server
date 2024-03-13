@@ -22,7 +22,7 @@ class Client {
 		const int& getClientFd() const;
 
 		void	setPassed(const bool& passed);
-		void	setNickname(const std::string& nickname);
+		void	setNickname(const std::string& nickname, bool nicknameOn = true);
 		void	setOldNickname(const std::string& oldNickname);
 		void	setUsername(const std::string& username);
 		void	setIp(const std::string& ip);
@@ -34,9 +34,12 @@ class Client {
 		void	deleteReadBuffer();
 		void	deleteWriteBuffer();
 		void	deleteJoinedChannel(Channel* channel);
+		void	deleteInvitedChannel(Channel* channel);
 
 		bool	hasCompleteMessage();
 		bool	canBeRegistered();
+
+		const std::string getClientInfo(bool isOld=false) const;
 
 	private:
 		Client();

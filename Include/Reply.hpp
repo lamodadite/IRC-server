@@ -42,6 +42,7 @@ class Reply	{
 		void	errNoRecipient(Client* client, const std::string& command);
 		void	errNoTextToSend(Client* client);
 		void	errUnknownCommand(Client* client, const std::string& message);
+		void	rplWelcomeMessage(Client* client);
 };
 
 #endif

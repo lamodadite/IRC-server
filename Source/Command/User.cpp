@@ -18,14 +18,6 @@ void User::execute(Resource& resource, Message message) {
 	client->setUsername(message.getParam()[1]);
 	client->setIp(message.getParam()[3]);
 	if (client->canBeRegistered()) {
-		fillWithWelcomeMessage(client);
+		reply.rplWelcomeMessage(client);
 	}
-}
-
-void	User::fillWithWelcomeMessage(Client* client) {
-	std::string message;
-
-	message = ":IRC_Server 001 " + client->getNickname();
-	message += " :Welcome to the IRC Server.\r\n";
-	client->addWriteBuffer(message);
 }

@@ -63,6 +63,7 @@ void	Resource::addChannel(const std::string& name) {
 	std::stringstream ss;
 	ss << time(NULL);
 	newChannel.setCreationTime(ss.str());
+	std::cout << ss.str() << '\n';
 
 	channelMap.insert(std::make_pair(name, newChannel));
 }
@@ -83,12 +84,19 @@ int		Resource::getClientCount() {return clientMap.size();}
 
 const std::string& Resource::getPassword() const {return password;}
 
-void	Resource::removeClientFromChannel(Client* client) {
-	for (std::map<std::string, Channel>::iterator it = channelMap.begin(); it != channelMap.end(); it++)
-	{
-		it->second.removeClient(client);
-		it->second.removeOperator(client);
-	}
-}
-
 void	Resource::setPassword(const std::string& password) {this->password = password;}
+
+void	Resource::removeEmptyChannel() {
+	std::map<std::string, Channel>::iterator it;
+	std::vector<std::map<std::string, Channel>::iterator> emptyChannel;
+
+	for (it = channelMap.begin(); it != channelMap.end(); it++) {
+		if (it->second.getClientList().size() == 0)
+		{
+			it->second.clearInvitedList();
+			emptyChannel.push_back(it);
+		}
+	}
+	for (size_t i = 0; i < emptyChannel.size(); i++)
+		channelMap.erase(emptyChannel[i]);
+}

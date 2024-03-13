@@ -17,6 +17,7 @@ class Invite : public Command {
 		void execute(Resource& resource, Message message);
 
 	private:
+		void sendMessageToClient(Client* client, Client* invitedClient, Channel* channel);
 };
 
 #endif
