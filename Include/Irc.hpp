@@ -16,5 +16,6 @@
 # include <cstring>
 # include <map>
 # include <set>
+# include <algorithm>
 
 #endif
