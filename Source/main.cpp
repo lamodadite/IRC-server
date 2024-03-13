@@ -18,6 +18,7 @@ int main(int ac, char *av[]) {
 		std::cerr << "Invalid port number : " << av[1] << "\n";
 		return 1;
 	}
+	std::srand(std::time(nullptr));
 	try {
 		Server server(port, av[2]);
 
