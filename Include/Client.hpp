@@ -17,6 +17,7 @@ class Client {
 		const bool&	getPassed() const;
 		const std::string&	getReadBuffer() const;
 		const std::string&	getUsername() const;
+		const std::string&	getIp() const;
 		const std::string&	getWriteBuffer() const;
 		const int& getClientFd() const;
 
@@ -24,6 +25,7 @@ class Client {
 		void	setNickname(const std::string& nickname);
 		void	setOldNickname(const std::string& oldNickname);
 		void	setUsername(const std::string& username);
+		void	setIp(const std::string& ip);
 		void	addReadBuffer(const std::string& str);
 		void	addWriteBuffer(const std::string& str);
 		void	addJoinedChannel(Channel* channel);
@@ -51,6 +53,7 @@ class Client {
 		std::string	username;
 		std::string	realname;
 		std::string	oldNickname;
+		std::string	ip;
 
 		bool	registered;
 		bool	passed;

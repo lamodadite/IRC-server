@@ -29,10 +29,15 @@ void Topic::execute(Resource& resource, Message message) {
 			reply.rplNoTopic(client, channel);
 		} else {
 			reply.rplTopic(client, channel);
-			//reply.rplTopicWhoTime(client, channel);
+			reply.rplTopicWhoTime(client, channel);
 		}
+		return;
 	} else {
 		channel->setTopic(message.getParam()[2]);
+		channel->setTopicAuthor(client->getNickname() + "!~" + client->getUsername() + "@" + client->getIp());
+		std::stringstream ss;
+		ss << time(NULL);
+		channel->setTopicSetTime(ss.str());
 	}
 	sendMessageToChannel(client, channel);
 }
