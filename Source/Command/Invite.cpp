@@ -24,13 +24,16 @@ void Invite::execute(Resource& resource, Message message) {
 	} else if (!channel->hasOperator(client)) {
 		reply.errChanOperIvsNeeded(client, channel);
 		return;
+	} else if (invitedClient == NULL) {
+		reply.errNoSuchNick(client, message.getParam()[1]);
+		return;	
 	} else if (channel->hasClient(invitedClient)) {
 		reply.errUserOnChannel(client, invitedClient->getNickname(), channel);
 		return;
 	}
 	// : <nickname> INVITE <invitedNickname>
 	channel->inviteClient(invitedClient);
-	reply.rplInviting(invitedClient, invitedClient->getNickname(), channel);
+	reply.rplInviting(client, invitedClient->getNickname(), channel);
 	sendMessageToClient(client, invitedClient, channel);
 }
 
@@ -38,7 +41,7 @@ void Invite::sendMessageToClient(Client* client, Client* invitedClient, Channel*
 	std::string message;
 
 	//:qwe!~jooh@121.135.181.42 INVITE sungyoon2 :#zxc
-	message = client->getClientInfo() + " INVITE " + invitedClient->getNickname();
-	message += " :#" + channel->getName();
+	message = ":" + client->getClientInfo() + " INVITE " + invitedClient->getNickname();
+	message += " :" + channel->getName() + "\r\n";
 	invitedClient->addWriteBuffer(message);
 }
