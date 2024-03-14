@@ -79,11 +79,7 @@ void	Client::deleteReadBuffer() {
 		readBuffer.erase(0, pos + 2);
 }
 
-void	Client::deleteWriteBuffer() {
-	size_t pos;
-	if ((pos = sendBuffer.find("\r\n")) != std::string::npos)
-		sendBuffer.erase(0, pos + 2);
-}
+void	Client::deleteWriteBuffer() {sendBuffer.clear();}
 
 void	Client::deleteJoinedChannel(Channel* channel) {
 	std::set<Channel*>::iterator it = joinedChannel.find(channel);

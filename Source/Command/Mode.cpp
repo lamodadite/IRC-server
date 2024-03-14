@@ -90,7 +90,7 @@ void	Mode::execute(Resource& resource, Message message) {
 	sendMessageToChannel(channel, replyMessage);
 }
 
-std::string	Mode::deleteFailedMode(std::string& modestring) {
+const std::string	Mode::deleteFailedMode(std::string& modestring) {
 	int flag = 1;
 	std::string	tmp;
 

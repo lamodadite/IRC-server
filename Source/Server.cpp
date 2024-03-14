@@ -106,14 +106,8 @@ void Server::recieveMessageFromClient(const int& fd) {
 
 void Server::sendMessageToClient(const int& fd) {
 	Client* client = resource.findClient(fd);
-	std::string tmp;
-
-	size_t index = client->getWriteBuffer().find("\r\n");
-	if (index != std::string::npos) {
-		tmp = client->getWriteBuffer().substr(0, index + 2);
-		client->deleteWriteBuffer();
-		send(fd, tmp.c_str(), tmp.size(), 0);
-	}
+	send(fd, client->getWriteBuffer().c_str(), client->getWriteBuffer().size(), 0);
+	client->deleteWriteBuffer();
 }
 
 void Server::disconnectClient(const int& fd) {

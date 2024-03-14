@@ -13,6 +13,7 @@ class User : public Command {
 		User(const User& rhs);
 		User& operator=(const User& rhs);
 		~User();
+		
 		void	execute(Resource& resource, Message message);
 
 	private:

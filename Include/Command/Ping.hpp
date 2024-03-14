@@ -13,6 +13,7 @@ class Ping : public Command {
 		Ping(const Ping& rhs);
 		Ping& operator=(const Ping& rhs);
 		~Ping();
+		
 		void	execute(Resource& resource, Message message);
 
 	private:

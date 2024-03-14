@@ -79,7 +79,7 @@ void	Resource::removeChannel(const std::string& name) {
 		channelMap.erase(it);
 }
 
-int		Resource::getClientCount() {return clientMap.size();}
+int		Resource::getClientCount() const {return clientMap.size();}
 
 const std::string& Resource::getPassword() const {return password;}
 
