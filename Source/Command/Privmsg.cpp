@@ -1,13 +1,13 @@
 #include "Privmsg.hpp"
 
 Privmsg::Privmsg() { }
-Privmsg::Privmsg(const Privmsg& rhs) {(void) rhs;}
+Privmsg::Privmsg(const Privmsg& rhs) : Command(rhs) {(void) rhs;}
 Privmsg& Privmsg::operator=(const Privmsg& rhs) {(void)rhs;return *this;}
 Privmsg::~Privmsg() { }
 
 void	Privmsg::splitByComma(std::vector<std::string>& target, std::string param) {
 	std::string	tmp;
-	size_t					index;
+	std::size_t	index;
 
 	while ((index = param.find(',')) != std::string::npos) {
 		tmp = param.substr(0, index);
@@ -27,7 +27,7 @@ void	Privmsg::execute(Resource& resource, Message message) {
 		return;
 	}
 	splitByComma(target, message.getParam()[1]);
-	for (size_t i = 0; i < target.size(); i++) {
+	for (std::size_t i = 0; i < target.size(); i++) {
 		if (target[i][0] == '#' || target[i][0] == '&') {
 			Channel* channel = resource.findChannel(target[i]);
 			if (channel == NULL) {
@@ -50,7 +50,7 @@ void	Privmsg::execute(Resource& resource, Message message) {
 	}
 	// :<nickname> PRIVMSG <target> <comment>
 	Client *targetClient;
-	for (size_t i = 0; i < target.size(); i++) {
+	for (std::size_t i = 0; i < target.size(); i++) {
 		if (target[i][0] == '#' || target[i][0] == '&') {
 			Channel *channel = resource.findChannel(target[i]);
 			const std::set<Client*>& clientList = channel->getClientList();

@@ -151,8 +151,8 @@ void	Reply::rplChannelModeIs(Client* client, Channel* channel) {
 	std::string	buffer;
 
 	std::sort(mode.begin(), mode.end());
-	size_t modesize = mode.size();
-	for (size_t i = 0; i < modesize; i++) {
+	std::size_t modesize = mode.size();
+	for (std::size_t i = 0; i < modesize; i++) {
 		if (mode[i] == 'k') mode += ' ' + channel->getKey();
 		else if (mode[i] == 'l') mode += ' ' + channel->getUserLimit();
 	}

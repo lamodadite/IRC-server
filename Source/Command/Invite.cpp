@@ -1,7 +1,7 @@
 #include "Invite.hpp"
 
 Invite::Invite() {}
-Invite::Invite(const Invite& rhs) {(void)rhs;}
+Invite::Invite(const Invite& rhs) : Command(rhs) {(void)rhs;}
 Invite& Invite::operator=(const Invite& rhs) {(void)rhs; return *this;}
 Invite::~Invite() { }
 

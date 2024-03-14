@@ -1,8 +1,8 @@
 #include "User.hpp"
 
 User::User() { }
-User::User(const User& rhs) {(void) rhs;}
-User& User::operator=(const User& rhs) {(void)rhs;return *this;}
+User::User(const User& rhs) : Command(rhs) {(void) rhs;}
+User& User::operator=(const User& rhs) {(void)rhs; return *this;}
 User::~User() { }
 
 void User::execute(Resource& resource, Message message) {

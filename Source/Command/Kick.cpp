@@ -1,13 +1,13 @@
 #include "Kick.hpp"
 
 Kick::Kick() {}
-Kick::Kick(const Kick& rhs) {(void)rhs;}
+Kick::Kick(const Kick& rhs) : Command(rhs) {(void)rhs;}
 Kick& Kick::operator=(const Kick& rhs) {(void)rhs; return *this;}
 Kick::~Kick() {}
 
 void	Kick::splitByComma(std::vector<std::string>& target, std::string param) {
 	std::string	tmp;
-	size_t					index;
+	std::size_t	index;
 
 	while ((index = param.find(',')) != std::string::npos) {
 		tmp = param.substr(0, index);
@@ -37,7 +37,7 @@ void Kick::execute(Resource& resource, Message message) {
 		return;
 	} 	
 	splitByComma(target, message.getParam()[2]);
-	for (size_t i = 0; i < target.size(); i++)
+	for (std::size_t i = 0; i < target.size(); i++)
 	{
 		kickedClient = resource.findClient(target[i]);
 		if (kickedClient == NULL || !channel->hasClient(kickedClient)) {

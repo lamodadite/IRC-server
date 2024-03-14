@@ -25,7 +25,7 @@ class Channel {
 		const std::string&	getMode() const;
 		const std::string&	getKey() const;
 		const std::set<Client*>&	getClientList() const;
-		const size_t&	getUserLimit() const;
+		const std::size_t&	getUserLimit() const;
 		const std::string&	getCreationTime() const;
 		const std::string&	getTopicAuthor() const;
 		const std::string&	getTopicSetTime() const;
@@ -33,7 +33,7 @@ class Channel {
 		void	setName(const std::string& name);
 		void	setTopic(const std::string& topic);
 		void	setKey(const std::string& key);
-		void	setUserLimit(const size_t& userLimit);
+		void	setUserLimit(const std::size_t& userLimit);
 		void	setCreationTime(const std::string& creationTime);
 		void	setTopicAuthor(const std::string& topicAuthor);
 		void	setTopicSetTime(const std::string& topicSetTime);
@@ -60,7 +60,7 @@ class Channel {
 		std::string			name;
 		std::string			topic;
 		std::string			mode;
-		size_t				userLimit;
+		std::size_t			userLimit;
 		std::string			creationTime;
 		std::string			topicAuthor;
 		std::string			topicSetTime;

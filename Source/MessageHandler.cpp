@@ -9,7 +9,7 @@ void MessageHandler::handleMessage(std::vector<Message>& messages, const int& fd
 	std::vector<std::string>	splitedBuffer;
 
 	splitBuffer(splitedBuffer, buffer);
-	for (size_t i = 0; i < splitedBuffer.size(); i++) {
+	for (std::size_t i = 0; i < splitedBuffer.size(); i++) {
 		if (!splitedBuffer[i].size()) continue;
 		Message	message;
 		splitToParam(splitedBuffer[i], message);
@@ -20,7 +20,7 @@ void MessageHandler::handleMessage(std::vector<Message>& messages, const int& fd
 
 void	MessageHandler::splitBuffer(std::vector<std::string>& splitedBuffer, std::string& buffer) {
 	std::string	tmp;
-	size_t		index;
+	std::size_t	index;
 
 	while ((index = buffer.find("\r\n")) != std::string::npos) {
 		tmp = buffer.substr(0, index);
@@ -30,10 +30,10 @@ void	MessageHandler::splitBuffer(std::vector<std::string>& splitedBuffer, std::s
 }
 
 void	MessageHandler::splitToParam(std::string& splitedBuffer, Message& message) {
-	std::string	tmp;
+	std::string					tmp;
 	std::vector<std::string>	params;
-	size_t					index;
-	size_t					colonIndex;
+	std::size_t					index;
+	std::size_t					colonIndex;
 
 	message.setOriginalMessage(splitedBuffer);
 	while (true) {
