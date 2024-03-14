@@ -38,7 +38,7 @@ void	Privmsg::execute(Resource& resource, Message message) {
 				return;
 			}
 		} else {
-			if (resource.findClient(target[i]) == NULL) {
+			if (resource.findClient(target[i]) == NULL && target[i] != "Bot") {
 				reply.errNoSuchNick(client, target[i]);
 				return;
 			}

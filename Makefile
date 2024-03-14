@@ -1,6 +1,6 @@
 CXXFLAGS	= -Wall -Wextra -Werror -std=c++98
-COMMANDS	= Command Invite Join Kick Mode Nick Pass Privmsg Topic User Ping Bot
-SRC			= Server main Channel Client Message MessageHandler Reply Resource $(addprefix Command/, $(COMMANDS))
+COMMANDS	= Command Invite Join Kick Mode Nick Pass Privmsg Topic User Ping
+SRC			= Server main Channel Client Message MessageHandler Reply Resource Bot $(addprefix Command/, $(COMMANDS))
 SRCS		= $(addprefix ./Source/, $(addsuffix .cpp, $(SRC)))
 OBJS_DIR	= ./Object/
 OBJS		= $(SRCS:.cpp=.o)

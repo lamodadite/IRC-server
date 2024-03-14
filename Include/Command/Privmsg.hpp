@@ -2,9 +2,9 @@
 #define PRIVMSG_HPP
 
 # include "Irc.hpp"
-# include "Bot.hpp"
 # include "Command.hpp"
 # include "Resource.hpp"
+#	include "Bot.hpp"
 
 class Bot;
 class Resource;
@@ -19,12 +19,11 @@ class Privmsg : public Command {
 		void	execute(Resource& resource, Message message);
 
 	private:
-		Bot		bot;
 		
 		void	splitByComma(std::vector<std::string>& target, std::string param);
 		void	SendMessageToChannel(Client* client, Channel* channel, Client* target, const std::string comment);
 		void	SendMessageToClient(Client* client, Client* target, const std::string comment);
-
+		Bot		bot;
 };
 
 #endif
