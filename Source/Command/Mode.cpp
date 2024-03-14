@@ -78,9 +78,11 @@ void	Mode::execute(Resource& resource, Message message) {
 		}
 	}
 	std::string replyMessage;
+	std::string tmp = deleteFailedMode(modestring);
+	if (!tmp.size()) return;
 	replyMessage += ":" + client->getClientInfo();
 	for (size_t i = 0; i < message.getParam().size(); i++) {
-		if (i == 2) replyMessage += ' ' + deleteFailedMode(modestring);
+		if (i == 2) replyMessage += ' ' + tmp;
 		else if (notValidArgument.find(i) != notValidArgument.end()) continue;
 		else replyMessage += ' ' + message.getParam()[i];
 	}
