@@ -1,3 +1,4 @@
+#include "Commands.hpp"
 #include "Resource.hpp"
 
 Resource::Resource() {

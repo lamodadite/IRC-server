@@ -24,6 +24,8 @@ bool Nick::isValidNickname(const std::string& nickname) const
 		return false;
 	else if (nickname.find("@") != std::string::npos)
 		return false;
+	else if (nickname == "Bot")
+		return false;
 	return true;
 }
 
