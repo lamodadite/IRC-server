@@ -87,7 +87,6 @@ void	Mode::execute(Resource& resource, Message message) {
 		else replyMessage += ' ' + message.getParam()[i];
 	}
 	replyMessage += "\r\n";
-	std::cout << replyMessage;
 	sendMessageToChannel(channel, replyMessage);
 }
 
