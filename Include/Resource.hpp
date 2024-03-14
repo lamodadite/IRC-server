@@ -24,7 +24,7 @@ class Resource {
 		void	addChannel(const std::string& name);
 		void	removeClient(const int& fd);
 		void	removeChannel(const std::string& name);
-		int		getClientCount();
+		int		getClientCount() const;
 
 		const std::string& getPassword() const;
 

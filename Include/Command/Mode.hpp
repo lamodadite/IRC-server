@@ -26,7 +26,7 @@ class Mode : public Command {
 		bool	changeModeK(Channel* channel, bool flag, int& index, Message message);
 		bool	changeModeO(Channel* channel, Resource& resource, bool flag, int& index, Message message);
 
-		std::string	deleteFailedMode(std::string& modestring);
+		const std::string	deleteFailedMode(std::string& modestring);
 };
 
 #endif
