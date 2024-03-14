@@ -11,6 +11,5 @@
 # include "Topic.hpp"
 # include "User.hpp"
 # include "Ping.hpp"
-# include "Bot.hpp"
 
 #endif

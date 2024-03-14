@@ -63,8 +63,12 @@ void	Privmsg::execute(Resource& resource, Message message) {
 			}
 		}
 		else {
-			targetClient = resource.findClient(target[i]);
-			SendMessageToClient(client, targetClient, message.getParam()[2]);
+			if (target[i] == "Bot") {
+				bot.execute(resource, message);
+			} else {
+				targetClient = resource.findClient(target[i]);
+				SendMessageToClient(client, targetClient, message.getParam()[2]);
+			}
 		}
 	}
 }

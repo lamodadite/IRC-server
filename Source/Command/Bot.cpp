@@ -12,7 +12,7 @@ void	Bot::execute(Resource& resource, Message message) {
 	if (i == false) {
 		whatsArgument(client);
 	} else if (i == FOOD) {
-		selectFood(client, message.getParam()[1]);
+		selectFood(client, message.getParam()[3]);
 	} else if (i == DRINK) {
 		selectDrink(client);
 	} else if (i == DICE) {
@@ -23,14 +23,14 @@ void	Bot::execute(Resource& resource, Message message) {
 }
 
 int	Bot::checkArgument(Message& message) {
-	if (message.getParam().size() == 1) return false;
-	if (message.getParam()[1] == "lunch" || message.getParam()[1] == "dinner") {
+	if (message.getParam().size() <= 3) return false;
+	if (message.getParam()[3] == "lunch" || message.getParam()[3] == "dinner") {
 		return FOOD;
-	} else if (message.getParam()[1] == "drink") {
+	} else if (message.getParam()[3] == "drink") {
 		return DRINK;
-	} else if (message.getParam()[1] == "dice") {
+	} else if (message.getParam()[3] == "dice") {
 		return DICE;
-	} else if (message.getParam()[1] == "home") {
+	} else if (message.getParam()[3] == "home") {
 		return HOME;
 	}
 	return false;

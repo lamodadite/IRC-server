@@ -2,7 +2,6 @@
 #define BOT_HPP
 
 # include "Irc.hpp"
-# include "Command.hpp"
 # include "Resource.hpp"
 
 # define FOOD 1
@@ -12,7 +11,7 @@
 
 class Resource;
 
-class Bot : public Command {
+class Bot {
 	public:
 		Bot();
 		Bot(const Bot& rhs);
@@ -22,7 +21,7 @@ class Bot : public Command {
 		void execute(Resource& resource, Message message);
 
 	private:
-		int	checkArgument(Message& message);
+		int		checkArgument(Message& message);
 		void	whatsArgument(Client* client);
 		void	selectFood(Client* client, const std::string& when);
 		void	selectDrink(Client* client);
