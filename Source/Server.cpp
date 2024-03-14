@@ -27,7 +27,7 @@ void Server::initServerSocket() {
 	fcntl(serverFd, F_SETFL, O_NONBLOCK);
 
 	int optval = 1;
-	if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) == -1) {
+	if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
 		std::cerr << "Setsockopt failed\n";
 		throw std::exception();
 	}
@@ -120,7 +120,10 @@ void Server::disconnectClient(const int& fd) {
 	close(fd);
 	EV_SET(&changeList[0], fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
 	EV_SET(&changeList[1], fd, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
-	kevent(kqFd, changeList, 2, NULL, 0, NULL);
+	if (kevent(kqFd, changeList, 2, NULL, 0, NULL) < 0) {
+		std::cerr << "Register socket to kqueue failed\n";
+		throw std::exception();
+	}
 	resource.removeClient(fd);
 	resource.removeEmptyChannel();
 }
@@ -133,7 +136,7 @@ void Server::acceptNewClient() {
 	newSocket = accept(serverFd, reinterpret_cast<struct sockaddr*>(&clntAddr), &addr_len);
 	if (newSocket < 0) {
 		std::cerr << "Accept failed\n";
-		throw std::exception();
+		return;
 	}
 	if (resource.getClientCount() < MAX_CLIENT) {
 		Client	newClient(newSocket);
@@ -150,7 +153,7 @@ void Server::acceptNewClient() {
 void Server::registerSocketToKqueue(const int& socketFd) {
 	EV_SET(&changeList[0], socketFd, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
 	EV_SET(&changeList[1], socketFd, EVFILT_WRITE, EV_ADD | EV_ENABLE, 0, 0, NULL);
-	if (kevent(kqFd, changeList, 2, NULL, 0, NULL) == -1) {
+	if (kevent(kqFd, changeList, 2, NULL, 0, NULL) < 0) {
 		std::cerr << "Register socket to kqueue failed\n";
 		throw std::exception();
 	}
