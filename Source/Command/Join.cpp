@@ -29,9 +29,9 @@ void Join::execute(Resource& resource, Message message) {
 			resource.addChannel(channels[i]);
 			channel = resource.findChannel(channels[i]);
 			channel->addOperator(client);
-			if (i < keys.size()) channel->setKey(keys[i]);
+			channel->addMode('t');
 		} else {
-			if (channel->getKey().size() && i < keys.size() && channel->getKey() != keys[i]) {
+			if (channel->hasMode('k') && (keys.size() <= i || (i < keys.size() && channel->getKey() != keys[i]))) {
 				reply.errBadChannelKey(client, channel);
 				continue;
 			}

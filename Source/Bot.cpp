@@ -23,7 +23,6 @@ void	Bot::execute(Resource& resource, Message message) {
 }
 
 int	Bot::checkArgument(Message& message) {
-	std::cout << message.getParam()[2] << "\n";
 	if (message.getParam().size() <= 2) return false;
 	if (message.getParam()[2] == "lunch" || message.getParam()[2] == "dinner") {
 		return FOOD;
@@ -110,7 +109,6 @@ void	Bot::selectDrink(Client* client) {
 	std::string	tmp;
 	tmp += ":Bot!~Bot@" + client->getIp() + " PRIVMSG " + client->getNickname();
 	tmp += " :I Recommand you " + drink + " to drink\r\n";
-	std::cout << tmp;
 	client->addWriteBuffer(tmp);
 }
 void	Bot::selectTimeToGoHome(Client* client) {
@@ -150,11 +148,13 @@ void	Bot::selectTimeToGoHome(Client* client) {
 }
 
 void	Bot::rollDice(Client* client) {
-	int random = std::rand() % 101;
-	std::string	tmp;
-	tmp += ":Bot!~Bot@" + client->getIp() + " PRIVMSG " + client->getNickname();
-	tmp += " :Today's Number Is ";
-	tmp += random;
-	tmp += "\r\n";
-	client->addWriteBuffer(tmp);
+	  int random = std::rand() % 101;
+    std::stringstream ss;
+    ss << random;
+    std::string tmp;
+    tmp += ":Bot!~Bot@" + client->getIp() + " PRIVMSG " + client->getNickname();
+    tmp += " :Today's Number Is ";
+    tmp += ss.str();
+    tmp += "\r\n";
+    client->addWriteBuffer(tmp);
 }
