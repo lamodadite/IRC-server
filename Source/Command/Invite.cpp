@@ -33,6 +33,7 @@ void Invite::execute(Resource& resource, Message message) {
 	}
 	// : <nickname> INVITE <invitedNickname>
 	channel->inviteClient(invitedClient);
+	invitedClient->addInvitedChannel(channel);
 	reply.rplInviting(client, invitedClient->getNickname(), channel);
 	sendMessageToClient(client, invitedClient, channel);
 }
