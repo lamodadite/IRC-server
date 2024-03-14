@@ -1,7 +1,7 @@
 #include "Topic.hpp"
 
 Topic::Topic() {}
-Topic::Topic(const Topic& rhs) {(void)rhs;}
+Topic::Topic(const Topic& rhs) : Command(rhs) {(void)rhs;}
 Topic& Topic::operator=(const Topic& rhs) {(void)rhs;return *this;}
 Topic::~Topic() {}
 
@@ -36,7 +36,7 @@ void Topic::execute(Resource& resource, Message message) {
 		channel->setTopic(message.getParam()[2]);
 		channel->setTopicAuthor(client->getClientInfo());
 		std::stringstream ss;
-		ss << time(NULL);
+		ss << std::time(NULL);
 		channel->setTopicSetTime(ss.str());
 	}
 	sendMessageToChannel(client, channel);

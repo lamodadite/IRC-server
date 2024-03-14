@@ -1,7 +1,7 @@
 #include "Nick.hpp"
 
 Nick::Nick() {}
-Nick::Nick(const Nick& rhs) {(void)rhs;}
+Nick::Nick(const Nick& rhs) : Command(rhs) {(void)rhs;}
 Nick& Nick::operator=(const Nick& rhs) {(void)rhs; return *this;}
 Nick::~Nick() {}
 

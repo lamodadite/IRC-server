@@ -61,7 +61,7 @@ void	Resource::addClient(const int& fd) {
 void	Resource::addChannel(const std::string& name) {
 	Channel newChannel(name);
 	std::stringstream ss;
-	ss << time(NULL);
+	ss << std::time(NULL);
 	newChannel.setCreationTime(ss.str());
 
 	channelMap.insert(std::make_pair(name, newChannel));
@@ -96,6 +96,6 @@ void	Resource::removeEmptyChannel() {
 			emptyChannel.push_back(it);
 		}
 	}
-	for (size_t i = 0; i < emptyChannel.size(); i++)
+	for (std::size_t i = 0; i < emptyChannel.size(); i++)
 		channelMap.erase(emptyChannel[i]);
 }

@@ -1,7 +1,7 @@
 #include "Pass.hpp"
 
 Pass::Pass() {}
-Pass::Pass(const Pass& rhs) {(void)rhs;}
+Pass::Pass(const Pass& rhs) : Command(rhs) {(void)rhs;}
 Pass& Pass::operator=(const Pass& rhs) {(void)rhs;return *this;}
 Pass::~Pass() {}
 

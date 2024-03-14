@@ -74,7 +74,7 @@ bool	Client::hasCompleteMessage() {
 }
 
 void	Client::deleteReadBuffer() {
-	size_t pos;
+	std::size_t pos;
 	while ((pos = readBuffer.find("\r\n")) != std::string::npos)
 		readBuffer.erase(0, pos + 2);
 }

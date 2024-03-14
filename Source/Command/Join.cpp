@@ -1,7 +1,7 @@
 #include "Join.hpp"
 
 Join::Join() {}
-Join::Join(const Join& rhs) {(void)rhs;}
+Join::Join(const Join& rhs) : Command(rhs) {(void)rhs;}
 Join& Join::operator=(const Join& rhs) {(void)rhs; return *this;}
 Join::~Join() {}
 
@@ -19,7 +19,7 @@ void Join::execute(Resource& resource, Message message) {
 	splitByComma(channels, message.getParam()[1]);
 	if (message.getParam().size() >= 3)
 		splitByComma(keys, message.getParam()[2]);
-	for (size_t i = 0; i < channels.size(); i++) {
+	for (std::size_t i = 0; i < channels.size(); i++) {
 		Channel* channel = resource.findChannel(channels[i]);
 		if (channel == 0) {
 			if ((channels[i][0] != '#' && channels[i][0] != '&') || hasControlG(channels[i])) {
@@ -60,7 +60,7 @@ void Join::execute(Resource& resource, Message message) {
 
 void	Join::splitByComma(std::vector<std::string>& target, std::string param) {
 	std::string	tmp;
-	size_t					index;
+	std::size_t	index;
 
 	while ((index = param.find(',')) != std::string::npos) {
 		tmp = param.substr(0, index);
@@ -89,7 +89,7 @@ void	Join::sendMessageToChannel(Channel* channel, Client* client) {
 }
 
  bool	Join::hasControlG(std::string param) {
- 	for (size_t i = 0; i < param.size(); i++)
+ 	for (std::size_t i = 0; i < param.size(); i++)
  		if (param[i] == 7) return true;
  	return false;
  }

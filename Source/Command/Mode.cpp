@@ -1,7 +1,7 @@
 #include "Mode.hpp"
 
 Mode::Mode() {}
-Mode::Mode(const Mode& rhs) {(void)rhs;}
+Mode::Mode(const Mode& rhs) : Command(rhs) {(void)rhs;}
 Mode& Mode::operator=(const Mode& rhs) {(void)rhs; return *this;}
 Mode::~Mode() {}
 
@@ -33,7 +33,7 @@ void	Mode::execute(Resource& resource, Message message) {
 	bool	flag = true;
 	int		arguments = 0;
 	std::string modestring = message.getParam()[2];
-	for (size_t i = 0; i < modestring.size(); i++) {
+	for (std::size_t i = 0; i < modestring.size(); i++) {
 		if (modestring[i] == '-') {
 			flag = false;
 			continue;
@@ -48,11 +48,11 @@ void	Mode::execute(Resource& resource, Message message) {
 		if (modestring[i] == 'o') arguments++;
 		if (flag == true && (modestring[i] == 'k' || modestring[i] == 'l')) arguments++;
 	}
-	if (message.getParam().size() != static_cast<size_t>(3 + arguments)) return;
+	if (message.getParam().size() != static_cast<std::size_t>(3 + arguments)) return;
 	flag = true;
 	int index = 3;
 	std::set<int> notValidArgument;
-	for (size_t i = 0; i < modestring.size(); i++) {
+	for (std::size_t i = 0; i < modestring.size(); i++) {
 		if (modestring[i] == '-') flag = false;
 		else if (modestring[i] == '+') flag = true;
 		if (modestring[i] == 7) continue;
@@ -81,7 +81,7 @@ void	Mode::execute(Resource& resource, Message message) {
 	std::string tmp = deleteFailedMode(modestring);
 	if (!tmp.size()) return;
 	replyMessage += ":" + client->getClientInfo();
-	for (size_t i = 0; i < message.getParam().size(); i++) {
+	for (std::size_t i = 0; i < message.getParam().size(); i++) {
 		if (i == 2) replyMessage += ' ' + tmp;
 		else if (notValidArgument.find(i) != notValidArgument.end()) continue;
 		else replyMessage += ' ' + message.getParam()[i];
@@ -94,7 +94,7 @@ const std::string	Mode::deleteFailedMode(std::string& modestring) {
 	int flag = 1;
 	std::string	tmp;
 
-	for (size_t i = 0; i < modestring.size(); i++) {
+	for (std::size_t i = 0; i < modestring.size(); i++) {
 		if (modestring[i] == 7) continue;
 		if (modestring[i] == '-') flag = -1;
 		else if (modestring[i] == '+') flag = 1;

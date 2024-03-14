@@ -18,5 +18,6 @@
 # include <set>
 # include <algorithm>
 # include <cstdlib>
+# include <cerrno>
 
 #endif

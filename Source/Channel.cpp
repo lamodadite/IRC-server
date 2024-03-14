@@ -49,7 +49,7 @@ const std::string&	Channel::getTopic() const {return topic;}
 const std::string&	Channel::getMode() const {return mode;}
 const std::string&	Channel::getKey() const {return key;}
 const std::set<Client*>&	Channel::getClientList() const {return clientList;}
-const size_t&	Channel::getUserLimit() const {return userLimit;}
+const std::size_t&	Channel::getUserLimit() const {return userLimit;}
 const std::string&	Channel::getCreationTime() const {return creationTime;}
 const std::string&	Channel::getTopicAuthor() const {return topicAuthor;}
 const std::string&	Channel::getTopicSetTime() const {return topicSetTime;}
@@ -57,7 +57,7 @@ const std::string&	Channel::getTopicSetTime() const {return topicSetTime;}
 void	Channel::setName(const std::string& name) {this->name = name;}
 void	Channel::setTopic(const std::string& topic) {this->topic = topic;}
 void	Channel::setKey(const std::string& key) {this->key = key;}
-void	Channel::setUserLimit(const size_t& userLimit) {this->userLimit = userLimit;}
+void	Channel::setUserLimit(const std::size_t& userLimit) {this->userLimit = userLimit;}
 void	Channel::setCreationTime(const std::string& creationTime) {this->creationTime = creationTime;}
 void	Channel::setTopicAuthor(const std::string& topicAuthor) {this->topicAuthor = topicAuthor;}
 void	Channel::setTopicSetTime(const std::string& topicSetTime) {this->topicSetTime = topicSetTime;}
@@ -68,7 +68,7 @@ void	Channel::addMode(const char mode) {
 }
 
 void Channel::removeMode(const char mode) {
-	size_t pos = this->mode.find(mode);
+	std::size_t pos = this->mode.find(mode);
 	if (pos != std::string::npos)
 		this->mode.erase(pos, 1);
 }
