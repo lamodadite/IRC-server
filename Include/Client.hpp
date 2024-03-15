@@ -22,7 +22,7 @@ class Client {
 		const int& getClientFd() const;
 
 		void	setPassed(const bool& passed);
-		void	setNickname(const std::string& nickname, bool nicknameOn = true);
+		void	setNickname(const std::string& nickname);
 		void	setOldNickname(const std::string& oldNickname);
 		void	setUsername(const std::string& username);
 		void	setIp(const std::string& ip);

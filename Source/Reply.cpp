@@ -16,7 +16,7 @@ void	Reply::errNeedMoreParams(Client* client, const std::string& command) {
 void	Reply::errAlreadyRegistered(Client* client) {
 	std::string	buffer;
 
-	buffer += ":IRC_Server 462 " + client->getNickname() + " :You may mot reregister\r\n";
+	buffer += ":IRC_Server 462 " + client->getNickname() + " :You may not reregister\r\n";
 	client->addWriteBuffer(buffer);
 }
 
@@ -34,17 +34,18 @@ void	Reply::errNoNicknameGiven(Client* client) {
 	client->addWriteBuffer(buffer);
 }
 
-void	Reply::errErroneusNickname(Client* client) {
+void	Reply::errErroneusNickname(Client* client, const std::string& desireNickname) {
 	std::string	buffer;
 
-	buffer += ":IRC_Server 432 " + client->getNickname() + ' ' + client->getNickname() + " :Erroneus nickname\r\n";
+	buffer += ":IRC_Server 432 " + client->getNickname() + ' ' + desireNickname + " :Erroneus nickname\r\n";
 	client->addWriteBuffer(buffer);
 }
 
-void	Reply::errNicknameInUse(Client* client) {
+void	Reply::errNicknameInUse(Client* client, const std::string& desireNickname) {
 	std::string	buffer;
+	std::string nickname = client->getNickname() == "" ? "*" : client->getNickname();
 
-	buffer += ":IRC_Server 433 " + client->getNickname() + ' ' + client->getNickname() + " :Nickname is already in use\r\n";
+	buffer += ":IRC_Server 433 " + nickname + ' ' + desireNickname + " :Nickname is already in use\r\n";
 	client->addWriteBuffer(buffer);
 }
 

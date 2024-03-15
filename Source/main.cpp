@@ -19,6 +19,7 @@ int main(int ac, char *av[]) {
 		return 1;
 	}
 	std::srand(std::time(NULL));
+	signal(SIGPIPE, SIG_IGN);
 	try {
 		Server server(port, av[2]);
 

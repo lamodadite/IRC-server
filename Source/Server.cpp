@@ -11,6 +11,7 @@ Server::Server(const int& port, const std::string& password)
 Server::~Server() {std::cout << "Closing Server\n";}
 
 void Server::initServerinfo() {
+	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	servAddr.sin_port = htons(port);
@@ -24,7 +25,10 @@ void Server::initServerSocket() {
 	}
 	std::cout << "Server socket fd is " << serverFd << '\n';
 
-	fcntl(serverFd, F_SETFL, O_NONBLOCK);
+	if (fcntl(serverFd, F_SETFL, O_NONBLOCK) < 0) {
+		std::cerr << "Server socket fcntl NONBLOCK failed\n";
+		throw std::exception();
+	}
 
 	int optval = 1;
 	if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
@@ -106,18 +110,15 @@ void Server::recieveMessageFromClient(const int& fd) {
 
 void Server::sendMessageToClient(const int& fd) {
 	Client* client = resource.findClient(fd);
-	send(fd, client->getWriteBuffer().c_str(), client->getWriteBuffer().size(), 0);
+	if (send(fd, client->getWriteBuffer().c_str(), client->getWriteBuffer().size(), 0) < 0) {
+		std::cerr << "Send failed, disconnect\n";
+		disconnectClient(fd);
+	}
 	client->deleteWriteBuffer();
 }
 
 void Server::disconnectClient(const int& fd) {
 	close(fd);
-	EV_SET(&changeList[0], fd, EVFILT_READ, EV_DELETE, 0, 0, NULL);
-	EV_SET(&changeList[1], fd, EVFILT_WRITE, EV_DELETE, 0, 0, NULL);
-	if (kevent(kqFd, changeList, 2, NULL, 0, NULL) < 0) {
-		std::cerr << "Register socket to kqueue failed\n";
-		throw std::exception();
-	}
 	resource.removeClient(fd);
 	resource.removeEmptyChannel();
 }
@@ -135,7 +136,10 @@ void Server::acceptNewClient() {
 	if (resource.getClientCount() < MAX_CLIENT) {
 		Client	newClient(newSocket);
 
-		fcntl(newSocket, F_SETFL, O_NONBLOCK);
+		if (fcntl(newSocket, F_SETFL, O_NONBLOCK) < 0) {
+			std::cerr << "Client socket fcntl NONBLOCK failed\n";
+			return;
+		}
 		registerSocketToKqueue(newSocket);
 		resource.addClient(newSocket);
 		std::cout << "New connection accepted from " << inet_ntoa(clntAddr.sin_addr) << '\n';
