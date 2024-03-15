@@ -32,7 +32,9 @@ bool Nick::isValidNickname(const std::string& nickname) const
 void Nick::execute(Resource& resource, Message message) {
 	Client*	client = resource.findClient(message.getClientFd());
 
-	if (message.getParam().size() < 2) {
+	if (!client->getPassed()) {
+		return ;
+	} else if (message.getParam().size() < 2) {
 		reply.errNoNicknameGiven(client);
 		return ;
 	} else if (resource.findClient(message.getParam()[1]) != NULL) {
