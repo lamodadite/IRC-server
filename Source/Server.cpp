@@ -110,7 +110,7 @@ void Server::recieveMessageFromClient(const int& fd) {
 
 void Server::sendMessageToClient(const int& fd) {
 	Client* client = resource.findClient(fd);
-	if (send(fd, client->getWriteBuffer().c_str(), client->getWriteBuffer().size(), 0) == -1) {
+	if (send(fd, client->getWriteBuffer().c_str(), client->getWriteBuffer().size(), 0) < 0) {
 		std::cerr << "Send failed, disconnect\n";
 		disconnectClient(fd);
 	}
