@@ -51,10 +51,9 @@ const int& Client::getClientFd() const {return clientFd;}
 
 void	Client::setPassed(const bool& passed) {this->passed = passed;}
 
-void	Client::setNickname(const std::string& nickname, bool nicknameOn) {
+void	Client::setNickname(const std::string& nickname) {
 	this->nickname = nickname;
-	if (nicknameOn)
-		this->nicknameOn = true;
+	this->nicknameOn = true;
 }
 
 void	Client::setOldNickname(const std::string& oldNickname) {this->oldNickname = oldNickname;}

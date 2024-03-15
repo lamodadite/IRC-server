@@ -36,11 +36,10 @@ void Nick::execute(Resource& resource, Message message) {
 		reply.errNoNicknameGiven(client);
 		return ;
 	} else if (resource.findClient(message.getParam()[1]) != NULL) {
-		client->setNickname(message.getParam()[1], false);
-		reply.errNicknameInUse(client);
+		reply.errNicknameInUse(client, message.getParam()[1]);
 		return ;
 	} else if (!isValidNickname(message.getParam()[1])) {
-		reply.errErroneusNickname(client);
+		reply.errErroneusNickname(client, message.getParam()[1]);
 		return ;
 	}
 	client->setOldNickname(client->getNickname());

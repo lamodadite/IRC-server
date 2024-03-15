@@ -19,8 +19,8 @@ class Reply	{
 		void	errAlreadyRegistered(Client* client);
 		void	errPasswdMisMatch(Client* client);
 		void	errNoNicknameGiven(Client* client);
-		void	errErroneusNickname(Client* client);
-		void	errNicknameInUse(Client* client);
+		void	errErroneusNickname(Client* client, const std::string& desireNickname);
+		void	errNicknameInUse(Client* client, const std::string& desireNickname);
 		void	errNoSuchChannel(Client* client, std::string channel);
 		void	errTooManyChannel(Client* client, Channel* channel);
 		void	errBadChannelKey(Client* client, Channel* channel);
