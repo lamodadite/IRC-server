@@ -72,7 +72,6 @@ void Server::networkProcess() {
 			}
 		}
 	}
-	std::cout << "asdasd\n";
 }
 
 void Server::recieveMessageFromClient(const int& fd) {
