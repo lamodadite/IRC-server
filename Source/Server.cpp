@@ -81,7 +81,7 @@ void Server::recieveMessageFromClient(const int& fd) {
 	memset(buffer, 0, sizeof(buffer));
 	ssize_t bytesRecieved = recv(fd, buffer, sizeof(buffer), 0);
 	if (bytesRecieved <= 0) {
-		if (bytesRecieved == 0 || errno != EAGAIN)
+		if (bytesRecieved == 0)
 			std::cerr << "disconnected\n";
 		else
 			std::cerr << "Recv failed\n";
