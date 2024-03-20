@@ -181,7 +181,7 @@ int	Mode::changeModeL(Channel* channel, bool flag, int& index, Message message) 
 		std::string argument = message.getParam()[index];
 		index++;
 		long tmp = std::strtol(argument.c_str(), NULL, 10);
-		if (errno == ERANGE || tmp <= 0 || tmp > 2147483647) return 2;
+		if (tmp <= 0 || tmp > 2147483647) return 2;
 		channel->setUserLimit(static_cast<int>(tmp));
 		channel->addMode('l');
 	}

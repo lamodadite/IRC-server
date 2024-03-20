@@ -4,7 +4,7 @@ static int	convertToPort(std::string port) {
 	for (std::size_t i = 0; i < port.size(); i++)
 		if (!std::isdigit(port[i])) return -1;
 	long tmp = std::strtol(port.c_str(), NULL, 10);
-	if (errno == ERANGE || tmp < 0 || tmp > 65535) return -1;
+	if (tmp < 0 || tmp > 65535) return -1;
 	return static_cast<int>(tmp);
 }
 
